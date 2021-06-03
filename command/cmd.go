@@ -1,4 +1,4 @@
-package main
+package command
 
 import (
 	"flag"
@@ -15,11 +15,15 @@ type Cmd struct {
 
 	// classpath
 	cpOption string
-	class    string
-	args     []string
+
+	// -Xjre
+	XjreOption string
+
+	class string
+	args  []string
 }
 
-func parseCmd() *Cmd {
+func ParseCmd() *Cmd {
 	cmd := Cmd{}
 
 	flag.Usage = printUsage
@@ -28,6 +32,7 @@ func parseCmd() *Cmd {
 	flag.BoolVar(&cmd.versionFlag, "version", false, "print version and exit")
 	flag.StringVar(&cmd.cpOption, "classpath", "", "classpath")
 	flag.StringVar(&cmd.cpOption, "cp", "", "classpath")
+	flag.StringVar(&cmd.XjreOption, "Xjre", "", "path to jre")
 
 	// 解析选项
 	flag.Parse()
