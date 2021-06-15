@@ -38,3 +38,15 @@ func readExceptionTable(reader *ClassReader) []*ExceptionTableEntry {
 	}
 	return exceptionTable
 }
+
+func (ca *CodeAttribute) MaxLocals() uint {
+	return uint(ca.maxLocals)
+}
+
+func (ca *CodeAttribute) MaxStack() uint {
+	return uint(ca.maxStack)
+}
+
+func (ca *CodeAttribute) Code() []byte {
+	return ca.code
+}
