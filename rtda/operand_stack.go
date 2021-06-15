@@ -76,3 +76,17 @@ func (os *OperandStack) PopRef() *Object {
 
 	return ref
 }
+
+func (os *OperandStack) PushSlot(slot Slot) {
+	os.slots[os.top] = slot
+	os.top++
+}
+
+func (os *OperandStack) PopSlot() Slot {
+	os.top--
+	return os.slots[os.top]
+}
+
+func (os *OperandStack) TopSlot() Slot {
+	return os.slots[os.top-1]
+}
