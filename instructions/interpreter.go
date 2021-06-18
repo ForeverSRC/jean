@@ -2,10 +2,10 @@ package instructions
 
 import (
 	"fmt"
-	"jean/classfile"
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/heap"
+	"jean/rtda/jvmstack"
 )
 
 import (
@@ -16,27 +16,22 @@ import (
 	_ "jean/instructions/extended"
 	_ "jean/instructions/loads"
 	_ "jean/instructions/math"
+	_ "jean/instructions/references"
 	_ "jean/instructions/stack"
 	_ "jean/instructions/stores"
 )
 
-func Interpreter(methodInfo *classfile.MemberInfo) {
-	codeAttr := methodInfo.CodeAttribute()
-
-	maxLocals := codeAttr.MaxLocals()
-	maxStack := codeAttr.MaxStack()
-	bytecode := codeAttr.Code()
-
-	thread := rtda.NewThread()
-	frame := thread.NewFrame(maxLocals, maxStack)
+func Interpreter(method *heap.Method) {
+	thread := jvmstack.NewThread()
+	frame := thread.NewFrame(method)
 	thread.PushFrame(frame)
 
 	// temp
 	defer catchErr(frame)
-	loop(thread, bytecode)
+	loop(thread, method.Code())
 }
 
-func loop(thread *rtda.Thread, bytecode []byte) {
+func loop(thread *jvmstack.Thread, bytecode []byte) {
 	frame := thread.PopFrame()
 	reader := &base.BytecodeReader{}
 
@@ -58,7 +53,7 @@ func loop(thread *rtda.Thread, bytecode []byte) {
 	}
 }
 
-func catchErr(frame *rtda.Frame) {
+func catchErr(frame *jvmstack.Frame) {
 	if r := recover(); r != nil {
 		fmt.Printf("LocalVars:%v\n", frame.LocalVars())
 		fmt.Printf("OperandStack:%v\n", frame.OperandStack())

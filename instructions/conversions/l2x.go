@@ -3,14 +3,14 @@ package conversions
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type L2D struct {
 	base.NoOperandsInstruction
 }
 
-func (l *L2D) Execute(frame *rtda.Frame) {
+func (l *L2D) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	val := stack.PopLong()
 	target := float64(val)
@@ -21,7 +21,7 @@ type L2F struct {
 	base.NoOperandsInstruction
 }
 
-func (l *L2F) Execute(frame *rtda.Frame) {
+func (l *L2F) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	val := stack.PopLong()
 	target := float32(val)
@@ -32,7 +32,7 @@ type L2I struct {
 	base.NoOperandsInstruction
 }
 
-func (l *L2I) Execute(frame *rtda.Frame) {
+func (l *L2I) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	val := stack.PopLong()
 	target := int32(val)

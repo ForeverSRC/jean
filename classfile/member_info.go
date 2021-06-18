@@ -27,6 +27,10 @@ func readMember(reader *ClassReader, cp ConstantPool) *MemberInfo {
 	}
 }
 
+func (mi *MemberInfo) AccessFlags() uint16 {
+	return mi.accessFlag
+}
+
 func (mi *MemberInfo) Name() string {
 	return mi.cp.getUtf8(mi.nameIndex)
 }
@@ -40,6 +44,17 @@ func (mi *MemberInfo) CodeAttribute() *CodeAttribute {
 		switch attrInfo.(type) {
 		case *CodeAttribute:
 			return attrInfo.(*CodeAttribute)
+		}
+	}
+
+	return nil
+}
+
+func (mi *MemberInfo) ConstantValueAttribute() *ConstantValueAttribute {
+	for _, attrInfo := range mi.attributes {
+		switch attrInfo.(type) {
+		case *ConstantValueAttribute:
+			return attrInfo.(*ConstantValueAttribute)
 		}
 	}
 

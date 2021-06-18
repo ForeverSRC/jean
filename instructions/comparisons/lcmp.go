@@ -3,14 +3,14 @@ package comparisons
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type LCMP struct {
 	base.NoOperandsInstruction
 }
 
-func (lcmp *LCMP) Execute(frame *rtda.Frame) {
+func (lcmp *LCMP) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v2 := stack.PopLong()
 	v1 := stack.PopLong()

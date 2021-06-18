@@ -1,4 +1,6 @@
-package rtda
+package jvmstack
+
+import "jean/rtda/heap"
 
 type Thread struct {
 	pc    int
@@ -11,8 +13,8 @@ func NewThread() *Thread {
 	}
 }
 
-func (t *Thread) NewFrame(maxLocals, maxStack uint) *Frame {
-	return newFrame(t, maxLocals, maxStack)
+func (t *Thread) NewFrame(method *heap.Method) *Frame {
+	return newFrame(t, method)
 }
 
 func (t *Thread) PushFrame(frame *Frame) {

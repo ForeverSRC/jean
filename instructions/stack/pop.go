@@ -3,14 +3,14 @@ package stack
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type POP struct {
 	base.NoOperandsInstruction
 }
 
-func (p *POP) Execute(frame *rtda.Frame) {
+func (p *POP) Execute(frame *jvmstack.Frame) {
 	frame.OperandStack().PopSlot()
 }
 
@@ -18,7 +18,7 @@ type POP2 struct {
 	base.NoOperandsInstruction
 }
 
-func (p *POP2) Execute(frame *rtda.Frame) {
+func (p *POP2) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	stack.PopSlot()
 	stack.PopSlot()

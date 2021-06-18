@@ -3,14 +3,14 @@ package math
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type IXOR struct {
 	base.NoOperandsInstruction
 }
 
-func (i *IXOR) Execute(frame *rtda.Frame) {
+func (i *IXOR) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v2 := stack.PopInt()
 	v1 := stack.PopInt()
@@ -23,7 +23,7 @@ type LXOR struct {
 	base.NoOperandsInstruction
 }
 
-func (l *LXOR) Execute(frame *rtda.Frame) {
+func (l *LXOR) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v2 := stack.PopLong()
 	v1 := stack.PopLong()

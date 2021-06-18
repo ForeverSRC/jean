@@ -230,7 +230,7 @@ CONSTANT_NameAndType_info{
 字段和方法名就是代码中出现的（或者编译器生成的）字段或方法的名字。Java虚拟机规范定义了一种简单的语法来描述字段和方法，可以根据下面的规则生成描述符：
 
 1. 类型描述符
-   1. 基本类型`byte、short、char、int、long、float`和`double`的描述符是单个字母，分别对应`B、S、C、I、J、F`和`D`
+   1. 基本类型`boolean、byte、short、char、int、long、float`和`double`的描述符是单个字母，分别对应`Z、B、S、C、I、J、F`和`D`
       1. 注意，`long`的描述符是`J`而不是`L`
    2. 引用类型的描述符是`L+类的完全限定名+分号`
    3. 数组类型的描述符是`[+数组元素类型描述符`

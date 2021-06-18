@@ -3,14 +3,14 @@ package math
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type DNEG struct {
 	base.NoOperandsInstruction
 }
 
-func (d *DNEG) Execute(frame *rtda.Frame) {
+func (d *DNEG) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	val := stack.PopDouble()
 	stack.PushDouble(-val)
@@ -20,7 +20,7 @@ type FNEG struct {
 	base.NoOperandsInstruction
 }
 
-func (f *FNEG) Execute(frame *rtda.Frame) {
+func (f *FNEG) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	val := stack.PopFloat()
 	stack.PushFloat(-val)
@@ -30,7 +30,7 @@ type INEG struct {
 	base.NoOperandsInstruction
 }
 
-func (i *INEG) Execute(frame *rtda.Frame) {
+func (i *INEG) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	val := stack.PopInt()
 	stack.PushInt(-val)
@@ -40,7 +40,7 @@ type LNEG struct {
 	base.NoOperandsInstruction
 }
 
-func (l *LNEG) Execute(frame *rtda.Frame) {
+func (l *LNEG) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	val := stack.PopLong()
 	stack.PushLong(-val)

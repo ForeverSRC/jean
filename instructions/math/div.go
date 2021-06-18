@@ -3,14 +3,14 @@ package math
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type DDIV struct {
 	base.NoOperandsInstruction
 }
 
-func (d *DDIV) Execute(frame *rtda.Frame) {
+func (d *DDIV) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
 	v1 := stack.PopDouble()
@@ -25,7 +25,7 @@ type FDIV struct {
 	base.NoOperandsInstruction
 }
 
-func (f *FDIV) Execute(frame *rtda.Frame) {
+func (f *FDIV) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
 	v1 := stack.PopFloat()
@@ -40,7 +40,7 @@ type IDIV struct {
 	base.NoOperandsInstruction
 }
 
-func (i *IDIV) Execute(frame *rtda.Frame) {
+func (i *IDIV) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
 	v1 := stack.PopInt()
@@ -58,7 +58,7 @@ type LDIV struct {
 	base.NoOperandsInstruction
 }
 
-func (l *LDIV) Execute(frame *rtda.Frame) {
+func (l *LDIV) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
 	v1 := stack.PopLong()

@@ -1,6 +1,9 @@
-package rtda
+package jvmstack
 
-import "math"
+import (
+	"jean/rtda/heap"
+	"math"
+)
 
 type OperandStack struct {
 	top   uint
@@ -62,12 +65,12 @@ func (os *OperandStack) PopDouble() float64 {
 	return math.Float64frombits(bits)
 }
 
-func (os *OperandStack) PushRef(ref *Object) {
+func (os *OperandStack) PushRef(ref *heap.Object) {
 	os.slots[os.top].ref = ref
 	os.top++
 }
 
-func (os *OperandStack) PopRef() *Object {
+func (os *OperandStack) PopRef() *heap.Object {
 	os.top--
 	ref := os.slots[os.top].ref
 

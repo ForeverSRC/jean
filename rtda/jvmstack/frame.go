@@ -1,20 +1,26 @@
-package rtda
+package jvmstack
+
+import (
+	"jean/rtda/heap"
+)
 
 type Frame struct {
 	lower        *Frame
 	localVars    LocalVars
 	operandStack *OperandStack
+	method       *heap.Method
 	thread       *Thread
 
 	// the next instruction after the call
 	nextPC int
 }
 
-func newFrame(t *Thread, maxLocals, maxStack uint) *Frame {
+func newFrame(t *Thread, method *heap.Method) *Frame {
 	return &Frame{
-		localVars:    newLocalVars(maxLocals),
-		operandStack: newOperandStack(maxStack),
+		localVars:    NewLocalVars(method.MaxLocals()),
+		operandStack: newOperandStack(method.MaxStack()),
 		thread:       t,
+		method:       method,
 	}
 }
 
@@ -24,6 +30,10 @@ func (f *Frame) LocalVars() LocalVars {
 
 func (f *Frame) OperandStack() *OperandStack {
 	return f.operandStack
+}
+
+func (f *Frame) Method() *heap.Method {
+	return f.method
 }
 
 func (f *Frame) Thread() *Thread {

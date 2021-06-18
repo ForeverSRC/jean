@@ -1,4 +1,4 @@
-package rtda
+package jvmstack
 
 type Stack struct {
 	maxSize uint

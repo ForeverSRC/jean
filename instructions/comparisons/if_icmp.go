@@ -3,14 +3,14 @@ package comparisons
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type IF_ICMPEQ struct {
 	base.BranchInstruction
 }
 
-func (ifIcmp *IF_ICMPEQ) Execute(frame *rtda.Frame) {
+func (ifIcmp *IF_ICMPEQ) Execute(frame *jvmstack.Frame) {
 	_ifIcmp(frame, func(v1, v2 int32) bool {
 		return v1 == v2
 	}, ifIcmp.Offset)
@@ -20,7 +20,7 @@ type IF_ICMPNE struct {
 	base.BranchInstruction
 }
 
-func (ifIcmp *IF_ICMPNE) Execute(frame *rtda.Frame) {
+func (ifIcmp *IF_ICMPNE) Execute(frame *jvmstack.Frame) {
 	_ifIcmp(frame, func(v1, v2 int32) bool {
 		return v1 != v2
 	}, ifIcmp.Offset)
@@ -30,7 +30,7 @@ type IF_ICMPLT struct {
 	base.BranchInstruction
 }
 
-func (ifIcmp *IF_ICMPLT) Execute(frame *rtda.Frame) {
+func (ifIcmp *IF_ICMPLT) Execute(frame *jvmstack.Frame) {
 	_ifIcmp(frame, func(v1, v2 int32) bool {
 		return v1 < v2
 	}, ifIcmp.Offset)
@@ -40,7 +40,7 @@ type IF_ICMPLE struct {
 	base.BranchInstruction
 }
 
-func (ifIcmp *IF_ICMPLE) Execute(frame *rtda.Frame) {
+func (ifIcmp *IF_ICMPLE) Execute(frame *jvmstack.Frame) {
 	_ifIcmp(frame, func(v1, v2 int32) bool {
 		return v1 <= v2
 	}, ifIcmp.Offset)
@@ -50,7 +50,7 @@ type IF_ICMPGT struct {
 	base.BranchInstruction
 }
 
-func (ifIcmp *IF_ICMPGT) Execute(frame *rtda.Frame) {
+func (ifIcmp *IF_ICMPGT) Execute(frame *jvmstack.Frame) {
 	_ifIcmp(frame, func(v1, v2 int32) bool {
 		return v1 > v2
 	}, ifIcmp.Offset)
@@ -60,13 +60,13 @@ type IF_ICMPGE struct {
 	base.BranchInstruction
 }
 
-func (ifIcmp *IF_ICMPGE) Execute(frame *rtda.Frame) {
+func (ifIcmp *IF_ICMPGE) Execute(frame *jvmstack.Frame) {
 	_ifIcmp(frame, func(v1, v2 int32) bool {
 		return v1 >= v2
 	}, ifIcmp.Offset)
 }
 
-func _ifIcmp(frame *rtda.Frame, cond func(int32, int32) bool, offset int) {
+func _ifIcmp(frame *jvmstack.Frame, cond func(int32, int32) bool, offset int) {
 	val2 := frame.OperandStack().PopInt()
 	val1 := frame.OperandStack().PopInt()
 	if cond(val1, val2) {

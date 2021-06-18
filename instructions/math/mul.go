@@ -3,14 +3,14 @@ package math
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type DMUL struct {
 	base.NoOperandsInstruction
 }
 
-func (d *DMUL) Execute(frame *rtda.Frame) {
+func (d *DMUL) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
 	v1 := stack.PopDouble()
@@ -25,7 +25,7 @@ type FMUL struct {
 	base.NoOperandsInstruction
 }
 
-func (f *FMUL) Execute(frame *rtda.Frame) {
+func (f *FMUL) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
 	v1 := stack.PopFloat()
@@ -40,7 +40,7 @@ type IMUL struct {
 	base.NoOperandsInstruction
 }
 
-func (i *IMUL) Execute(frame *rtda.Frame) {
+func (i *IMUL) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
 	v1 := stack.PopInt()
@@ -55,7 +55,7 @@ type LMUL struct {
 	base.NoOperandsInstruction
 }
 
-func (l *LMUL) Execute(frame *rtda.Frame) {
+func (l *LMUL) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
 	v1 := stack.PopLong()

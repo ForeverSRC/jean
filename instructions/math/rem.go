@@ -3,7 +3,7 @@ package math
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 	"math"
 )
 
@@ -11,7 +11,7 @@ type DREM struct {
 	base.NoOperandsInstruction
 }
 
-func (d *DREM) Execute(frame *rtda.Frame) {
+func (d *DREM) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v1 := stack.PopDouble()
 	v2 := stack.PopDouble()
@@ -24,7 +24,7 @@ type FREM struct {
 	base.NoOperandsInstruction
 }
 
-func (f *FREM) Execute(frame *rtda.Frame) {
+func (f *FREM) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v1 := stack.PopFloat()
 	v2 := stack.PopFloat()
@@ -37,7 +37,7 @@ type IREM struct {
 	base.NoOperandsInstruction
 }
 
-func (i *IREM) Execute(frame *rtda.Frame) {
+func (i *IREM) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v1 := stack.PopInt()
 	v2 := stack.PopInt()
@@ -53,7 +53,7 @@ type LREM struct {
 	base.NoOperandsInstruction
 }
 
-func (l *LREM) Execute(frame *rtda.Frame) {
+func (l *LREM) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v1 := stack.PopLong()
 	v2 := stack.PopLong()

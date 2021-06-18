@@ -3,15 +3,16 @@ package comparisons
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/heap"
+	"jean/rtda/jvmstack"
 )
 
 type IF_ACMPEQ struct {
 	base.BranchInstruction
 }
 
-func (ifAcmp *IF_ACMPEQ) Execute(frame *rtda.Frame) {
-	_ifAcmp(frame, func(r1, r2 *rtda.Object) bool {
+func (ifAcmp *IF_ACMPEQ) Execute(frame *jvmstack.Frame) {
+	_ifAcmp(frame, func(r1, r2 *heap.Object) bool {
 		return r1 == r2
 	}, ifAcmp.Offset)
 }
@@ -20,13 +21,13 @@ type IF_ACMPNE struct {
 	base.BranchInstruction
 }
 
-func (ifAcmp *IF_ACMPNE) Execute(frame *rtda.Frame) {
-	_ifAcmp(frame, func(r1, r2 *rtda.Object) bool {
+func (ifAcmp *IF_ACMPNE) Execute(frame *jvmstack.Frame) {
+	_ifAcmp(frame, func(r1, r2 *heap.Object) bool {
 		return r1 != r2
 	}, ifAcmp.Offset)
 }
 
-func _ifAcmp(frame *rtda.Frame, cond func(r1, r2 *rtda.Object) bool, offset int) {
+func _ifAcmp(frame *jvmstack.Frame, cond func(r1, r2 *heap.Object) bool, offset int) {
 	stack := frame.OperandStack()
 	ref2 := stack.PopRef()
 	ref1 := stack.PopRef()
