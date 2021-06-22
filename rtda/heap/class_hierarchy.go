@@ -10,14 +10,14 @@ func (c *Class) isAssignableFrom(other *Class) bool {
 	}
 
 	if !c.IsInterface() {
-		return other.isSubClassOf(c)
+		return other.IsSubClassOf(c)
 	} else {
-		return other.isImplements(c)
+		return other.IsImplements(c)
 	}
 }
 
-// isSubClassOf 判断S是否是T的子类，实际上也就是判断T是否是S的（直接或间接）超类。
-func (c *Class) isSubClassOf(other *Class) bool {
+// IsSubClassOf 判断S是否是T的子类，实际上也就是判断T是否是S的（直接或间接）超类。
+func (c *Class) IsSubClassOf(other *Class) bool {
 	for super := c.superClass; super != nil; super = super.superClass {
 		if super == other {
 			return true
@@ -27,8 +27,8 @@ func (c *Class) isSubClassOf(other *Class) bool {
 	return false
 }
 
-// isImplements 判断S是否实现了T接口，就看S或S的（直接或间接）超类是否实现了某个接口T' ,T’要么是T，要么是T的子接口。
-func (c *Class) isImplements(iface *Class) bool {
+// IsImplements 判断c是否实现了iface接口，就看c或c的（直接或间接）超类是否实现了某个接口iface' ,iface’要么是iface，要么是iface的子接口。
+func (c *Class) IsImplements(iface *Class) bool {
 	for class := c; class != nil; class = class.superClass {
 		for _, i := range class.interfaces {
 			if i == iface || i.isSubInterfaceOf(iface) {
@@ -48,4 +48,8 @@ func (c *Class) isSubInterfaceOf(iface *Class) bool {
 	}
 
 	return false
+}
+
+func (c *Class) IsSuperClassOf(other *Class) bool {
+	return other.IsSubClassOf(c)
 }

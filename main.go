@@ -1,5 +1,11 @@
 package main
 
-func main() {
+import "jean/command"
 
+func main() {
+	cmd := command.ParseCmd()
+	ok := cmd.ParseFlags()
+	if ok {
+		command.StartJVM(cmd)
+	}
 }

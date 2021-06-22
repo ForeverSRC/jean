@@ -36,3 +36,11 @@ func (t *Thread) PC() int {
 func (t *Thread) SetPC(pc int) {
 	t.pc = pc
 }
+
+func (t *Thread) TopFrame() *Frame {
+	return t.CurrentFrame()
+}
+
+func (t *Thread) IsStackEmpty() bool {
+	return t.stack.IsEmpty()
+}

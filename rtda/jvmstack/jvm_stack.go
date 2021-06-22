@@ -23,7 +23,7 @@ func (s *Stack) push(frame *Frame) {
 }
 
 func (s *Stack) pop() *Frame {
-	if s._top == nil {
+	if s.IsEmpty() {
 		panic("jvm stack is empty! ")
 	}
 	top := s._top
@@ -39,4 +39,8 @@ func (s *Stack) top() *Frame {
 		panic("jvm stack is empty! ")
 	}
 	return s._top
+}
+
+func (s *Stack) IsEmpty() bool {
+	return s._top == nil
 }

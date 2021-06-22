@@ -19,6 +19,7 @@ type Class struct {
 	instanceSlotCount uint
 	staticSlotCount   uint
 	staticVars        Slots
+	initStarted       bool
 }
 
 func newClass(cf *classfile.ClassFile) *Class {
@@ -71,11 +72,11 @@ func (c *Class) IsEnum() bool {
 
 // IsAccessibleTo c能否被other访问
 func (c *Class) IsAccessibleTo(other *Class) bool {
-	return c.IsPublic() || c.getPackageName() == other.getPackageName()
+	return c.IsPublic() || c.GetPackageName() == other.GetPackageName()
 }
 
-// exp: "java/lang/Integer" packageName is "java/lang"
-func (c *Class) getPackageName() string {
+// GetPackageName exp: "java/lang/Integer" packageName is "java/lang"
+func (c *Class) GetPackageName() string {
 	if i := strings.LastIndex(c.name, "/"); i >= 0 {
 		return c.name[:i]
 	}
@@ -91,16 +92,36 @@ func (c *Class) StaticVars() Slots {
 	return c.staticVars
 }
 
-func (c *Class) GetMainMethod() *Method {
-	return c.getStaticMethod("main","([Ljava/lang/String;)V")
+func (c *Class) SuperClass() *Class {
+	return c.superClass
 }
 
-func (c *Class) getStaticMethod(name,descriptor string) *Method {
-	for _,method:=range c.methods{
-		if method.IsStatic()&&method.name==name&&method.descriptor==descriptor{
+func (c *Class) Name() string {
+	return c.name
+}
+
+func (c *Class) GetMainMethod() *Method {
+	return c.getStaticMethod("main", "([Ljava/lang/String;)V")
+}
+
+func (c *Class) getStaticMethod(name, descriptor string) *Method {
+	for _, method := range c.methods {
+		if method.IsStatic() && method.name == name && method.descriptor == descriptor {
 			return method
 		}
 	}
 
 	return nil
+}
+
+func (c *Class) InitStarted() bool {
+	return c.initStarted
+}
+
+func (c *Class) StartInit() {
+	c.initStarted = true
+}
+
+func (c *Class) GetClinitMethod() *Method {
+	return c.getStaticMethod("<clinit>", "()V")
 }

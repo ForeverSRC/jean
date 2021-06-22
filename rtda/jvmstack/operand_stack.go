@@ -93,3 +93,8 @@ func (os *OperandStack) PopSlot() Slot {
 func (os *OperandStack) TopSlot() Slot {
 	return os.slots[os.top-1]
 }
+
+// GetRefFromTop 返回距离栈顶n个slot的引用变量
+func (os *OperandStack) GetRefFromTop(n uint) *heap.Object {
+	return os.slots[os.top-1-n].ref
+}

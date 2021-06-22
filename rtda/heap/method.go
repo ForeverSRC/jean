@@ -1,12 +1,15 @@
 package heap
 
-import "jean/classfile"
+import (
+	"jean/classfile"
+)
 
 type Method struct {
 	ClassMember
-	maxStack  uint
-	maxLocals uint
-	code      []byte
+	maxStack     uint
+	maxLocals    uint
+	code         []byte
+	argSlotCount uint
 }
 
 func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
@@ -16,6 +19,7 @@ func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
 		methods[i].class = class
 		methods[i].copyMemberInfo(cfMethod)
 		methods[i].copyAttributes(cfMethod)
+		methods[i].calArgSlotCount()
 	}
 
 	return methods
@@ -26,6 +30,20 @@ func (m *Method) copyAttributes(cfMethod *classfile.MemberInfo) {
 		m.maxStack = codeAttr.MaxStack()
 		m.maxLocals = codeAttr.MaxLocals()
 		m.code = codeAttr.Code()
+	}
+}
+
+func (m *Method) calArgSlotCount() {
+	parsedDescriptor := parseMethodDescriptor(m.descriptor)
+	for _, paramType := range parsedDescriptor.parameterTypes {
+		m.argSlotCount++
+		if paramType == "J" || paramType == "D" {
+			m.argSlotCount++
+		}
+	}
+	// instant method, need a slot for param 'this'
+	if !m.IsStatic() {
+		m.argSlotCount++
 	}
 }
 
@@ -61,4 +79,8 @@ func (m *Method) MaxLocals() uint {
 }
 func (m *Method) Code() []byte {
 	return m.code
+}
+
+func (m *Method) ArgSlotCount() uint {
+	return m.argSlotCount
 }

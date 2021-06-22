@@ -47,3 +47,8 @@ func (f *Frame) NextPC() int {
 func (f *Frame) SetNextPC(nextPC int) {
 	f.nextPC = nextPC
 }
+
+// RevertNextPC 让下一条指令重新指向当前指令
+func (f *Frame) RevertNextPC() {
+	f.nextPC = f.thread.pc
+}

@@ -7,17 +7,12 @@ import (
 )
 
 type Cmd struct {
-	// 帮助位
-	helpFlag bool
-
-	// 版本位
-	versionFlag bool
-
-	// classpath
-	cpOption string
-
-	// -Xjre
-	XjreOption string
+	helpFlag         bool
+	versionFlag      bool
+	verboseClassFlag bool
+	verboseInstFlag  bool
+	cpOption         string
+	XjreOption       string
 
 	class string
 	args  []string
@@ -30,6 +25,8 @@ func ParseCmd() *Cmd {
 	flag.BoolVar(&cmd.helpFlag, "help", false, "print help message")
 	flag.BoolVar(&cmd.helpFlag, "? ", false, "print help message")
 	flag.BoolVar(&cmd.versionFlag, "version", false, "print version and exit")
+	flag.BoolVar(&cmd.verboseClassFlag, "verbose:class", false, "print class load info")
+	flag.BoolVar(&cmd.verboseInstFlag, "verbose:inst", false, "print instruction info")
 	flag.StringVar(&cmd.cpOption, "classpath", "", "classpath")
 	flag.StringVar(&cmd.cpOption, "cp", "", "classpath")
 	flag.StringVar(&cmd.XjreOption, "Xjre", "", "path to jre")
@@ -45,6 +42,18 @@ func ParseCmd() *Cmd {
 	}
 
 	return &cmd
+}
+
+func (c *Cmd) ParseFlags() bool {
+	if c.versionFlag {
+		fmt.Println("version 0.0.1")
+		return false
+	} else if c.helpFlag || c.class == "" {
+		printUsage()
+		return false
+	}
+
+	return true
 }
 
 func printUsage() {

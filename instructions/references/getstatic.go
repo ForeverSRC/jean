@@ -16,6 +16,11 @@ func (gs *GET_STATIC) Execute(frame *jvmstack.Frame) {
 	fieldRef := cp.GetConstant(gs.Index).(*heap.FieldRef)
 	field := fieldRef.ResolvedField()
 	class := field.Class()
+	if !class.InitStarted() {
+		frame.RevertNextPC()
+		base.InitClass(frame.Thread(), class)
+		return
+	}
 
 	if !field.IsStatic() {
 		panic("java.lang.IncompatibleClassChangeError")
