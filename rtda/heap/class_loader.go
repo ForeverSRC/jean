@@ -28,7 +28,28 @@ func (cl *ClassLoader) LoadClass(name string) *Class {
 		return class
 	}
 
+	if name[0] == '[' {
+		return cl.LoadArrayClass(name)
+	}
+
 	return cl.LoadNonArrayClass(name)
+}
+
+func (cl *ClassLoader) LoadArrayClass(name string) *Class {
+	class := &Class{
+		accessFlag:  ACC_PUBLIC, //todo
+		name:        name,
+		loader:      cl,
+		initStarted: true,
+		superClass:  cl.LoadClass("java/lang/Object"),
+		interfaces: []*Class{
+			cl.LoadClass("java/lang/Cloneable"),
+			cl.LoadClass("java/io/Serializable"),
+		},
+	}
+
+	cl.classMap[name] = class
+	return class
 }
 
 func (cl *ClassLoader) LoadNonArrayClass(name string) *Class {
@@ -168,8 +189,9 @@ func initStaticFinalVar(class *Class, field *Field) {
 			val := rtCp.GetConstant(cpIndex).(float64)
 			vars.SetDouble(slotId, val)
 		case "Ljava/lang/String;":
-			// todo:implements
-			panic("todo")
+			goStr := rtCp.GetConstant(cpIndex).(string)
+			jStr := JString(class.Loader(), goStr)
+			vars.SetRef(slotId, jStr)
 		}
 	}
 }

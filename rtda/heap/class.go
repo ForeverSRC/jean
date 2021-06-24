@@ -75,6 +75,18 @@ func (c *Class) IsAccessibleTo(other *Class) bool {
 	return c.IsPublic() || c.GetPackageName() == other.GetPackageName()
 }
 
+func (c *Class) IsJlObject() bool {
+	return c.name == "java/lang/Object"
+}
+
+func (c *Class) IsJlCloneable() bool {
+	return c.name == "java/lang/Cloneable"
+}
+
+func (c *Class) IsJioSerializable() bool {
+	return c.name == "java/io/Serializable"
+}
+
 // GetPackageName exp: "java/lang/Integer" packageName is "java/lang"
 func (c *Class) GetPackageName() string {
 	if i := strings.LastIndex(c.name, "/"); i >= 0 {
@@ -98,6 +110,10 @@ func (c *Class) SuperClass() *Class {
 
 func (c *Class) Name() string {
 	return c.name
+}
+
+func (c *Class) Loader() *ClassLoader {
+	return c.loader
 }
 
 func (c *Class) GetMainMethod() *Method {
@@ -124,4 +140,21 @@ func (c *Class) StartInit() {
 
 func (c *Class) GetClinitMethod() *Method {
 	return c.getStaticMethod("<clinit>", "()V")
+}
+
+func (c *Class) ArrayClass() *Class {
+	arrayClassName := getArrayClassName(c.name)
+	return c.loader.LoadClass(arrayClassName)
+}
+
+func (c *Class) getField(name, descriptor string, isStatic bool) *Field {
+	for cl := c; cl != nil; cl = cl.superClass {
+		for _, field := range cl.fields {
+			if field.IsStatic() == isStatic && field.name == name && field.descriptor == descriptor {
+				return field
+			}
+		}
+	}
+
+	return nil
 }

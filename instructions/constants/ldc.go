@@ -3,6 +3,7 @@ package constants
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
+	"jean/rtda/heap"
 	"jean/rtda/jvmstack"
 )
 
@@ -31,11 +32,11 @@ func (ldc *LDC2_W) Execute(frame *jvmstack.Frame) {
 	cp := frame.Method().Class().ConstantPool()
 	c := cp.GetConstant(ldc.Index)
 
-	switch c.(type) {
+	switch ct := c.(type) {
 	case int64:
-		stack.PushLong(c.(int64))
+		stack.PushLong(ct)
 	case float64:
-		stack.PushDouble(c.(float64))
+		stack.PushDouble(ct)
 	default:
 		panic("java.lang.ClassFormatError")
 	}
@@ -43,15 +44,17 @@ func (ldc *LDC2_W) Execute(frame *jvmstack.Frame) {
 
 func _ldc(frame *jvmstack.Frame, index uint) {
 	stack := frame.OperandStack()
-	cp := frame.Method().Class().ConstantPool()
-	c := cp.GetConstant(index)
+	class := frame.Method().Class()
+	c := class.ConstantPool().GetConstant(index)
 
-	switch c.(type) {
+	switch ct := c.(type) {
 	case int32:
-		stack.PushInt(c.(int32))
+		stack.PushInt(ct)
 	case float32:
-		stack.PushFloat(c.(float32))
-	// case string
+		stack.PushFloat(ct)
+	case string:
+		internedStr := heap.JString(class.Loader(), ct)
+		stack.PushRef(internedStr)
 	// case *heap.ClassRef
 	default:
 		panic("todo: ldc!")

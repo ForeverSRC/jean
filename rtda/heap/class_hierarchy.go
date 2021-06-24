@@ -5,15 +5,45 @@ package heap
 // 2.other is sub class of c
 // 3.other implemented interface c
 func (c *Class) isAssignableFrom(other *Class) bool {
-	if other == c {
+	s, t := other, c
+	if s == t {
 		return true
 	}
 
-	if !c.IsInterface() {
-		return other.IsSubClassOf(c)
+	if !s.IsArray() {
+		if !s.IsInterface() {
+			if !t.IsInterface() {
+				// s is class and t is not interface
+				return s.IsSubClassOf(t)
+			} else {
+				// s is class and t is interface
+				return s.IsImplements(t)
+			}
+		} else {
+			if !t.IsInterface() {
+				// s is interface and t is not interface
+				return t.IsJlObject()
+			} else {
+				// s is interface and t is interface
+				return t.isSubInterfaceOf(s)
+			}
+		}
 	} else {
-		return other.IsImplements(c)
+		if !t.IsArray() {
+			if !t.IsInterface() {
+				// s is array and t is class
+				return t.IsJlObject()
+			} else {
+				// s is array and t is interface
+				return t.IsJlCloneable() || t.IsJioSerializable()
+			}
+		} else {
+			sc := s.ComponentClass()
+			tc := t.ComponentClass()
+			return sc == tc || tc.isAssignableFrom(sc)
+		}
 	}
+
 }
 
 // IsSubClassOf 判断S是否是T的子类，实际上也就是判断T是否是S的（直接或间接）超类。
