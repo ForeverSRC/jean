@@ -55,7 +55,9 @@ func _ldc(frame *jvmstack.Frame, index uint) {
 	case string:
 		internedStr := heap.JString(class.Loader(), ct)
 		stack.PushRef(internedStr)
-	// case *heap.ClassRef
+	case *heap.ClassRef:
+		classObj := ct.ResolvedClass().JClass()
+		stack.PushRef(classObj)
 	default:
 		panic("todo: ldc!")
 	}

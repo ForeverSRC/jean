@@ -2,6 +2,7 @@ package heap
 
 import (
 	"jean/classfile"
+	"jean/constants"
 	"strings"
 )
 
@@ -20,6 +21,8 @@ type Class struct {
 	staticSlotCount   uint
 	staticVars        Slots
 	initStarted       bool
+	// java.lang.Class 实例
+	jClass *Object
 }
 
 func newClass(cf *classfile.ClassFile) *Class {
@@ -76,15 +79,15 @@ func (c *Class) IsAccessibleTo(other *Class) bool {
 }
 
 func (c *Class) IsJlObject() bool {
-	return c.name == "java/lang/Object"
+	return c.name == constants.JavaLangObject
 }
 
 func (c *Class) IsJlCloneable() bool {
-	return c.name == "java/lang/Cloneable"
+	return c.name == constants.JavaLangCloneable
 }
 
 func (c *Class) IsJioSerializable() bool {
-	return c.name == "java/io/Serializable"
+	return c.name == constants.JavaIoSerializable
 }
 
 // GetPackageName exp: "java/lang/Integer" packageName is "java/lang"
@@ -116,18 +119,8 @@ func (c *Class) Loader() *ClassLoader {
 	return c.loader
 }
 
-func (c *Class) GetMainMethod() *Method {
-	return c.getStaticMethod("main", "([Ljava/lang/String;)V")
-}
-
-func (c *Class) getStaticMethod(name, descriptor string) *Method {
-	for _, method := range c.methods {
-		if method.IsStatic() && method.name == name && method.descriptor == descriptor {
-			return method
-		}
-	}
-
-	return nil
+func (c *Class) JClass() *Object {
+	return c.jClass
 }
 
 func (c *Class) InitStarted() bool {
@@ -136,10 +129,6 @@ func (c *Class) InitStarted() bool {
 
 func (c *Class) StartInit() {
 	c.initStarted = true
-}
-
-func (c *Class) GetClinitMethod() *Method {
-	return c.getStaticMethod("<clinit>", "()V")
 }
 
 func (c *Class) ArrayClass() *Class {
@@ -152,6 +141,51 @@ func (c *Class) getField(name, descriptor string, isStatic bool) *Field {
 		for _, field := range cl.fields {
 			if field.IsStatic() == isStatic && field.name == name && field.descriptor == descriptor {
 				return field
+			}
+		}
+	}
+
+	return nil
+}
+
+func (c *Class) JavaName() string {
+	return strings.Replace(c.name, "/", ".", -1)
+}
+
+func (c *Class) IsPrimitive() bool {
+	_, ok := primitiveTypes[c.name]
+	return ok
+}
+
+func (c *Class) GetRefVar(fieldName, fieldDescriptor string) *Object {
+	field := c.getField(fieldName, fieldDescriptor, true)
+	return c.staticVars.GetRef(field.slotId)
+}
+
+func (c *Class) SetRefVar(fieldName, fieldDescriptor string, ref *Object) {
+	field := c.getField(fieldName, fieldDescriptor, true)
+	c.staticVars.SetRef(field.slotId, ref)
+}
+
+func (c *Class) GetClinitMethod() *Method {
+	return c.getMethod("<clinit>", "()V", true)
+}
+
+func (c *Class) GetInstanceMethod(name, descriptor string) *Method {
+	return c.getMethod(name, descriptor, false)
+}
+
+func (c *Class) GetMainMethod() *Method {
+	return c.getMethod("main", "([Ljava/lang/String;)V", true)
+}
+
+func (c *Class) getMethod(name, descriptor string, isStatic bool) *Method {
+	for clazz := c; clazz != nil; clazz = c.superClass {
+		for _, method := range c.methods {
+			if method.IsStatic() == isStatic &&
+				method.name == name &&
+				method.descriptor == descriptor {
+				return method
 			}
 		}
 	}

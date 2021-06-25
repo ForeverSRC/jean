@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"jean/classfile"
 	"jean/classpath"
+	"jean/constants"
 )
 
 type ClassLoader struct {
@@ -15,11 +16,46 @@ type ClassLoader struct {
 }
 
 func NewClassLoader(cp *classpath.ClassPath, verboseFlag bool) *ClassLoader {
-	return &ClassLoader{
+	loader := &ClassLoader{
 		cp:          cp,
 		verboseFlag: verboseFlag,
 		classMap:    make(map[string]*Class),
 	}
+
+	loader.loadBasicClasses()
+	loader.loadPrimitiveClasses()
+	return loader
+}
+
+func (cl *ClassLoader) loadBasicClasses() {
+	jlClassClass := cl.LoadClass(constants.JavaLangClass)
+	for _, class := range cl.classMap {
+		if class.jClass == nil {
+			class.jClass = jlClassClass.NewObject()
+			class.jClass.extra = class
+		}
+
+	}
+}
+
+func (cl *ClassLoader) loadPrimitiveClasses() {
+	for primitiveType, _ := range primitiveTypes {
+		cl.loadPrimitiveClass(primitiveType)
+	}
+}
+
+func (cl *ClassLoader) loadPrimitiveClass(className string) {
+	class := &Class{
+		accessFlag:  ACC_PUBLIC,
+		name:        className,
+		loader:      cl,
+		initStarted: true,
+	}
+
+	class.jClass = cl.classMap[constants.JavaLangClass].NewObject()
+	class.jClass.extra = class
+
+	cl.classMap[className] = class
 }
 
 func (cl *ClassLoader) LoadClass(name string) *Class {
@@ -28,11 +64,20 @@ func (cl *ClassLoader) LoadClass(name string) *Class {
 		return class
 	}
 
+	var class *Class
 	if name[0] == '[' {
-		return cl.LoadArrayClass(name)
+		class = cl.LoadArrayClass(name)
+	} else {
+		class = cl.LoadNonArrayClass(name)
 	}
 
-	return cl.LoadNonArrayClass(name)
+	// 如果java/lang/Class类已经加载完毕，则关联当前加载的类
+	if jlClassClass, ok := cl.classMap[constants.JavaLangClass]; ok {
+		class.jClass = jlClassClass.NewObject()
+		class.jClass.extra = class
+	}
+
+	return class
 }
 
 func (cl *ClassLoader) LoadArrayClass(name string) *Class {
@@ -41,10 +86,10 @@ func (cl *ClassLoader) LoadArrayClass(name string) *Class {
 		name:        name,
 		loader:      cl,
 		initStarted: true,
-		superClass:  cl.LoadClass("java/lang/Object"),
+		superClass:  cl.LoadClass(constants.JavaLangObject),
 		interfaces: []*Class{
-			cl.LoadClass("java/lang/Cloneable"),
-			cl.LoadClass("java/io/Serializable"),
+			cl.LoadClass(constants.JavaLangCloneable),
+			cl.LoadClass(constants.JavaIoSerializable),
 		},
 	}
 
@@ -91,7 +136,7 @@ func parseClass(data []byte) *Class {
 }
 
 func resolveSuperClass(class *Class) {
-	if class.name != "java/lang/Object" {
+	if class.name != constants.JavaLangObject {
 		class.superClass = class.loader.LoadClass(class.superClassName)
 	}
 }

@@ -2,6 +2,7 @@ package instructions
 
 import (
 	"fmt"
+	"jean/constants"
 	"jean/instructions/base"
 	"jean/instructions/factory"
 	"jean/rtda/heap"
@@ -17,6 +18,7 @@ import (
 	_ "jean/instructions/loads"
 	_ "jean/instructions/math"
 	_ "jean/instructions/references"
+	_ "jean/instructions/reserved"
 	_ "jean/instructions/stack"
 	_ "jean/instructions/stores"
 )
@@ -35,7 +37,7 @@ func Interpreter(method *heap.Method, logInst bool, args []string) {
 }
 
 func createArgsArray(loader *heap.ClassLoader, args []string) *heap.Object {
-	stringClass := loader.LoadClass("java/lang/String")
+	stringClass := loader.LoadClass(constants.JavaLangString)
 	argsArr := stringClass.ArrayClass().NewArray(uint(len(args)))
 
 	jArgs := argsArr.Refs()

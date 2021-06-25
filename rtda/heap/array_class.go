@@ -7,23 +7,23 @@ func (c *Class) NewArray(count uint) *Object {
 
 	switch c.name {
 	case "[Z":
-		return &Object{c, make([]int8, count)}
+		return &Object{class: c, data: make([]int8, count)}
 	case "[B":
-		return &Object{c, make([]int8, count)}
+		return &Object{class: c, data: make([]int8, count)}
 	case "[C":
-		return &Object{c, make([]uint16, count)}
+		return &Object{class: c, data: make([]uint16, count)}
 	case "[S":
-		return &Object{c, make([]int16, count)}
+		return &Object{class: c, data: make([]int16, count)}
 	case "[I":
-		return &Object{c, make([]int32, count)}
+		return &Object{class: c, data: make([]int32, count)}
 	case "[J":
-		return &Object{c, make([]int64, count)}
+		return &Object{class: c, data: make([]int64, count)}
 	case "[F":
-		return &Object{c, make([]float32, count)}
+		return &Object{class: c, data: make([]float32, count)}
 	case "[D":
-		return &Object{c, make([]float64, count)}
+		return &Object{class: c, data: make([]float64, count)}
 	default:
-		return &Object{c, make([]*Object, count)}
+		return &Object{class: c, data: make([]*Object, count)}
 	}
 }
 
