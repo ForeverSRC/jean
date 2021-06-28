@@ -9,6 +9,7 @@ type Thread struct {
 
 func NewThread() *Thread {
 	return &Thread{
+		// todo 命令行指定虚拟机栈大小
 		stack: newStack(1024),
 	}
 }
@@ -43,4 +44,12 @@ func (t *Thread) TopFrame() *Frame {
 
 func (t *Thread) IsStackEmpty() bool {
 	return t.stack.IsEmpty()
+}
+
+func (t *Thread) ClearStack() {
+	t.stack.clear()
+}
+
+func (t *Thread) GetFrames() []*Frame {
+	return t.stack.getFrames()
 }

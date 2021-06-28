@@ -19,3 +19,14 @@ func (lnta LineNumberTableAttribute) readInfo(reader *ClassReader) {
 		}
 	}
 }
+
+func (lnta *LineNumberTableAttribute) GetLineNumber(pc int) int {
+	for i := len(lnta.lineNumberTable) - 1; i >= 0; i-- {
+		entry := lnta.lineNumberTable[i]
+		if pc >= int(entry.startPc) {
+			return int(entry.lineNumber)
+		}
+	}
+
+	return -1
+}

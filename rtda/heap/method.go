@@ -6,10 +6,12 @@ import (
 
 type Method struct {
 	ClassMember
-	maxStack     uint
-	maxLocals    uint
-	code         []byte
-	argSlotCount uint
+	maxStack        uint
+	maxLocals       uint
+	code            []byte
+	argSlotCount    uint
+	exceptionTable  ExceptionTable
+	lineNumberTable *classfile.LineNumberTableAttribute
 }
 
 func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
@@ -40,6 +42,8 @@ func (m *Method) copyAttributes(cfMethod *classfile.MemberInfo) {
 		m.maxStack = codeAttr.MaxStack()
 		m.maxLocals = codeAttr.MaxLocals()
 		m.code = codeAttr.Code()
+		m.lineNumberTable = codeAttr.LineNumberTableAttribute()
+		m.exceptionTable = newExceptionTable(codeAttr.ExceptionTable(), m.class.constantPool)
 	}
 }
 
@@ -56,6 +60,7 @@ func (m *Method) calArgSlotCount(parameterTypes []string) {
 	}
 }
 
+// injectCodeAttribute for native method
 func (m *Method) injectCodeAttribute(returnType string) {
 	m.maxStack = 4
 	m.maxLocals = m.argSlotCount
@@ -74,6 +79,15 @@ func (m *Method) injectCodeAttribute(returnType string) {
 	default:
 		m.code = []byte{0xfe, 0xac} //ireturn
 	}
+}
+
+func (m *Method) FindExceptionHandler(exclass *Class, pc int) int {
+	handler := m.exceptionTable.findExceptionHandler(exclass, pc)
+	if handler != nil {
+		return handler.handlerPc
+	}
+
+	return -1
 }
 
 func (m *Method) IsSynchronized() bool {
@@ -112,4 +126,16 @@ func (m *Method) Code() []byte {
 
 func (m *Method) ArgSlotCount() uint {
 	return m.argSlotCount
+}
+
+func (m *Method) GetLineNumber(pc int) int {
+	if m.IsNative() {
+		return -2
+	}
+
+	if m.lineNumberTable == nil {
+		return -1
+	}
+
+	return m.lineNumberTable.GetLineNumber(pc)
 }
