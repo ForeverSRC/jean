@@ -33,7 +33,10 @@ func (iv *INVOKE_VIRTUAL) Execute(frame *jvmstack.Frame) {
 		resolvedMethod.Class().GetPackageName() != currentClass.GetPackageName() &&
 		thisRef.Class() != currentClass &&
 		!thisRef.Class().IsSubClassOf(currentClass) {
-		panic("java.lang.IllegalAccessError")
+
+		if !(thisRef.Class().IsArray() && resolvedMethod.Name() == "clone") {
+			panic("java.lang.IllegalAccessError")
+		}
 	}
 
 	methodToBeInvoked := heap.LookupMethodInClass(thisRef.Class(), methodRef.Name(), methodRef.Descriptor())

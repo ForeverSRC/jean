@@ -13,8 +13,8 @@ type DDIV struct {
 func (d *DDIV) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopDouble()
 	v2 := stack.PopDouble()
+	v1 := stack.PopDouble()
 
 	res := v1 / v2
 
@@ -28,8 +28,8 @@ type FDIV struct {
 func (f *FDIV) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopFloat()
 	v2 := stack.PopFloat()
+	v1 := stack.PopFloat()
 
 	res := v1 / v2
 
@@ -43,8 +43,8 @@ type IDIV struct {
 func (i *IDIV) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopInt()
 	v2 := stack.PopInt()
+	v1 := stack.PopInt()
 	if v2 == 0 {
 		panic("java.lang.ArithmeticException: / by zero")
 	}
@@ -61,8 +61,8 @@ type LDIV struct {
 func (l *LDIV) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopLong()
 	v2 := stack.PopLong()
+	v1 := stack.PopLong()
 	if v2 == 0 {
 		panic("java.lang.ArithmeticException: / by zero")
 	}

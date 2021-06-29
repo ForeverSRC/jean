@@ -2,10 +2,8 @@ package instructions
 
 import (
 	"fmt"
-	"jean/constants"
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda/heap"
 	"jean/rtda/jvmstack"
 )
 
@@ -23,29 +21,10 @@ import (
 	_ "jean/instructions/stores"
 )
 
-func Interpreter(method *heap.Method, logInst bool, args []string) {
-	thread := jvmstack.NewThread()
-	frame := thread.NewFrame(method)
-	thread.PushFrame(frame)
-
-	jArgs := createArgsArray(method.Class().Loader(), args)
-	frame.LocalVars().SetRef(0, jArgs)
-
+func Interpreter(thread *jvmstack.Thread, logInst bool) {
 	// temp
 	defer catchErr(thread)
 	loop(thread, logInst)
-}
-
-func createArgsArray(loader *heap.ClassLoader, args []string) *heap.Object {
-	stringClass := loader.LoadClass(constants.JavaLangString)
-	argsArr := stringClass.ArrayClass().NewArray(uint(len(args)))
-
-	jArgs := argsArr.Refs()
-	for i, arg := range args {
-		jArgs[i] = heap.JString(loader, arg)
-	}
-
-	return argsArr
 }
 
 func loop(thread *jvmstack.Thread, logInst bool) {
@@ -65,7 +44,7 @@ func loop(thread *jvmstack.Thread, logInst bool) {
 		frame.SetNextPC(reader.PC())
 
 		if logInst {
-			logInstruction(frame, inst)
+			logInstruction(opcode, frame, inst)
 		}
 
 		// execute
@@ -83,12 +62,12 @@ func catchErr(thread *jvmstack.Thread) {
 	}
 }
 
-func logInstruction(frame *jvmstack.Frame, inst base.Instruction) {
+func logInstruction(opcode uint8, frame *jvmstack.Frame, inst base.Instruction) {
 	method := frame.Method()
 	className := method.Class().Name()
 	methodName := method.Name()
 	pc := frame.Thread().PC()
-	fmt.Printf("%v.%v() #%2d %T %v\n", className, methodName, pc, inst, inst)
+	fmt.Printf("opcode:[0x%x] %v.%v() #%2d %T %v\n", opcode, className, methodName, pc, inst, inst)
 }
 
 func logFrames(thread *jvmstack.Thread) {

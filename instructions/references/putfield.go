@@ -61,7 +61,7 @@ func (pf *PUT_FIELD) Execute(frame *jvmstack.Frame) {
 			panic("java.lang.NullPointerException")
 		}
 		ref.Fields().SetDouble(slotId, val)
-	case 'L':
+	case 'L', '[':
 		val := stack.PopRef()
 		ref := stack.PopRef()
 		if ref == nil {

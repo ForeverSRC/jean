@@ -20,38 +20,29 @@ func newConstantPool(class *Class, cfCp classfile.ConstantPool) *ConstantPool {
 
 	for i := 1; i < cpCount; i++ {
 		cpInfo := cfCp[i]
-		switch cpInfo.(type) {
+		switch cpInfoType := cpInfo.(type) {
 		case *classfile.ConstantIntegerInfo:
-			intInfo := cpInfo.(*classfile.ConstantIntegerInfo)
-			pool[i] = intInfo.Value()
+			pool[i] = cpInfoType.Value()
 		case *classfile.ConstantFloatInfo:
-			floatInfo := cpInfo.(*classfile.ConstantFloatInfo)
-			pool[i] = floatInfo
+			pool[i] = cpInfoType.Value()
 		case *classfile.ConstantLongInfo:
 			// long 类型常量占据两个位置
-			longInfo := cpInfo.(*classfile.ConstantLongInfo)
-			pool[i] = longInfo
+			pool[i] = cpInfoType.Value()
 			i++
 		case *classfile.ConstantDoubleInfo:
 			// double 类型常量占据两个位置
-			doubleInfo := cpInfo.(*classfile.ConstantDoubleInfo)
-			pool[i] = doubleInfo
+			pool[i] = cpInfoType.Value()
 			i++
 		case *classfile.ConstantStringInfo:
-			stringInfo := cpInfo.(*classfile.ConstantStringInfo)
-			pool[i] = stringInfo
+			pool[i] = cpInfoType.String()
 		case *classfile.ConstantClassInfo:
-			classInfo := cpInfo.(*classfile.ConstantClassInfo)
-			pool[i] = newClassRef(rtCp, classInfo)
+			pool[i] = newClassRef(rtCp, cpInfoType)
 		case *classfile.ConstantFieldrefInfo:
-			fieldRefInfo := cpInfo.(*classfile.ConstantFieldrefInfo)
-			pool[i] = newFieldRef(rtCp, fieldRefInfo)
+			pool[i] = newFieldRef(rtCp, cpInfoType)
 		case *classfile.ConstantMethodrefInfo:
-			methodRefInfo := cpInfo.(*classfile.ConstantMethodrefInfo)
-			pool[i] = newMethodRef(rtCp, methodRefInfo)
+			pool[i] = newMethodRef(rtCp, cpInfoType)
 		case *classfile.ConstantInterfaceMethodrefInfo:
-			interfaceMethodInfo := cpInfo.(*classfile.ConstantInterfaceMethodrefInfo)
-			pool[i] = newInterfaceMethodRef(rtCp, interfaceMethodInfo)
+			pool[i] = newInterfaceMethodRef(rtCp, cpInfoType)
 		}
 
 	}

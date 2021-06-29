@@ -3,14 +3,18 @@ package heap
 import "jean/classfile"
 
 type ClassMember struct {
-	accessFlags uint16
-	name        string
-	descriptor  string
-	class       *Class
+	accessFlags    uint16
+	name           string
+	descriptor     string
+	signature      string
+	annotationData []byte // RuntimeVisibleAnnotations_attribute
+	class          *Class
 }
 
 func (cm *ClassMember) copyMemberInfo(memberInfo *classfile.MemberInfo) {
 	cm.accessFlags = memberInfo.AccessFlags()
+	cm.name = memberInfo.Name()
+	cm.descriptor = memberInfo.Descriptor()
 }
 
 func (cm *ClassMember) IsPublic() bool {
@@ -38,21 +42,21 @@ func (cm *ClassMember) IsSynthetic() bool {
 }
 
 // cm能否被other访问
-func (cm *ClassMember) isAccessibleTo(other *Class) bool {
+func (cm *ClassMember) isAccessibleTo(d *Class) bool {
 	if cm.IsPublic() {
 		return true
 	}
 
 	c := cm.class
-	if c.IsProtected() {
-		return other == c || other.IsSubClassOf(c) || c.GetPackageName() == other.GetPackageName()
+	if cm.IsProtected() {
+		return d == c || d.IsSubClassOf(c) || c.GetPackageName() == d.GetPackageName()
 	}
 
 	if !cm.IsPrivate() {
-		return c.GetPackageName() == other.GetPackageName()
+		return c.GetPackageName() == d.GetPackageName()
 	}
 
-	return other == c
+	return d == c
 }
 
 func (cm *ClassMember) Class() *Class {
@@ -65,4 +69,16 @@ func (cm *ClassMember) Name() string {
 
 func (cm *ClassMember) Descriptor() string {
 	return cm.descriptor
+}
+
+func (cm *ClassMember) AccessFlags() uint16 {
+	return cm.accessFlags
+}
+
+func (cm *ClassMember) Signature() string {
+	return cm.signature
+}
+
+func (cm *ClassMember) AnnotationData() []byte {
+	return cm.annotationData
 }

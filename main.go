@@ -6,6 +6,6 @@ func main() {
 	cmd := command.ParseCmd()
 	ok := cmd.ParseFlags()
 	if ok {
-		command.StartJVM(cmd)
+		command.NewJVM(cmd).Start()
 	}
 }

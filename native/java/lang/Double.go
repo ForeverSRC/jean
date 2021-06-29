@@ -14,6 +14,14 @@ func doubleToRawLongBits(frame *jvmstack.Frame) {
 	frame.OperandStack().PushLong(int64(bits))
 }
 
+// public static native double longBitsToDouble(long bits);
+func longBitsToDouble(frame *jvmstack.Frame) {
+	bits := frame.LocalVars().GetLong(0)
+	value := math.Float64frombits(uint64(bits))
+	frame.OperandStack().PushDouble(value)
+}
+
 func init() {
-	native.Registrer(constants.JavaLangDouble, "doubleToRawLongBits", "(D)J", doubleToRawLongBits)
+	native.Register(constants.JavaLangDouble, "doubleToRawLongBits", "(D)J", doubleToRawLongBits)
+	native.Register(constants.JavaLangDouble, "longBitsToDouble", "(J)D", longBitsToDouble)
 }

@@ -11,9 +11,10 @@ type IFNULL struct {
 }
 
 func (ifnull *IFNULL) Execute(frame *jvmstack.Frame) {
-	_execute(frame, func(i interface{}) bool {
-		return i == nil
-	}, ifnull.Offset)
+	ref := frame.OperandStack().PopRef()
+	if ref == nil {
+		base.Branch(frame, ifnull.Offset)
+	}
 }
 
 type IFNONNULL struct {
@@ -21,15 +22,9 @@ type IFNONNULL struct {
 }
 
 func (ifnonnull *IFNONNULL) Execute(frame *jvmstack.Frame) {
-	_execute(frame, func(i interface{}) bool {
-		return i != nil
-	}, ifnonnull.Offset)
-}
-
-func _execute(frame *jvmstack.Frame, judgement func(interface{}) bool, offset int) {
 	ref := frame.OperandStack().PopRef()
-	if judgement(ref) {
-		base.Branch(frame, offset)
+	if ref != nil {
+		base.Branch(frame, ifnonnull.Offset)
 	}
 }
 

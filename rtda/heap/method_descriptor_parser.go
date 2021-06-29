@@ -75,7 +75,7 @@ func (mdp *MethodDescriptorParser) parseObjectType() string {
 	unread := mdp.raw[mdp.offset:]
 
 	// index of ';'
-	semicolonIndex := strings.IndexRune(unread, ':')
+	semicolonIndex := strings.IndexRune(unread, ';')
 	if semicolonIndex == -1 {
 		mdp.causePanic()
 		return ""

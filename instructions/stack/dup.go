@@ -20,7 +20,8 @@ type DUP struct {
 
 func (d *DUP) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
-	slot := stack.TopSlot()
+	slot := stack.PopSlot()
+	stack.PushSlot(slot)
 	stack.PushSlot(slot)
 }
 

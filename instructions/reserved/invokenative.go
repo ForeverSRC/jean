@@ -5,9 +5,17 @@ import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
 	"jean/native"
-	_ "jean/native/java/lang"
-	_ "jean/native/sun/misc"
 	"jean/rtda/jvmstack"
+)
+
+import (
+	_ "jean/native/java/io"
+	_ "jean/native/java/lang"
+	_ "jean/native/java/security"
+	_ "jean/native/java/util/concurrent/atomic"
+	_ "jean/native/sun/io"
+	_ "jean/native/sun/misc"
+	_ "jean/native/sun/reflect"
 )
 
 type INVOKE_NATIVE struct {
@@ -22,7 +30,7 @@ func (iv *INVOKE_NATIVE) Execute(frame *jvmstack.Frame) {
 
 	nativeMethod := native.FindNativeMethod(className, methodName, methodDescriptor)
 	if nativeMethod == nil {
-		panic("java.lang.UnsatisfiedLinkError: " + fmt.Sprintf("%s.%s%s", className, methodName, methodDescriptor))
+		panic("java.lang.UnsatisfiedLinkError: " + fmt.Sprintf("%s.%s %s", className, methodName, methodDescriptor))
 	}
 
 	nativeMethod(frame)

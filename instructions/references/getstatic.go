@@ -40,7 +40,7 @@ func (gs *GET_STATIC) Execute(frame *jvmstack.Frame) {
 		stack.PushLong(slots.GetLong(slotId))
 	case 'D':
 		stack.PushDouble(slots.GetDouble(slotId))
-	case 'L':
+	case 'L', '[':
 		stack.PushRef(slots.GetRef(slotId))
 	}
 }

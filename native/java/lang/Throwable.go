@@ -60,5 +60,5 @@ func createStackTraceElement(frame *jvmstack.Frame) *StackTraceElement {
 }
 
 func init() {
-	native.Registrer(constants.JavaLangThrowable, "fillInStackTrace", "(I)Ljava/lang/Throwable;", fillInStackTrace)
+	native.Register(constants.JavaLangThrowable, "fillInStackTrace", "(I)Ljava/lang/Throwable;", fillInStackTrace)
 }

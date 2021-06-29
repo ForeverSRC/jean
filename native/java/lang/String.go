@@ -21,5 +21,5 @@ func intern(frame *jvmstack.Frame) {
 }
 
 func init() {
-	native.Registrer(constants.JavaLangString, "intern", "()Ljava/lang/String;", intern)
+	native.Register(constants.JavaLangString, "intern", "()Ljava/lang/String;", intern)
 }

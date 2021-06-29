@@ -13,8 +13,8 @@ type DMUL struct {
 func (d *DMUL) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopDouble()
 	v2 := stack.PopDouble()
+	v1 := stack.PopDouble()
 
 	res := v1 * v2
 
@@ -28,8 +28,8 @@ type FMUL struct {
 func (f *FMUL) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopFloat()
 	v2 := stack.PopFloat()
+	v1 := stack.PopFloat()
 
 	res := v1 * v2
 
@@ -43,8 +43,8 @@ type IMUL struct {
 func (i *IMUL) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopInt()
 	v2 := stack.PopInt()
+	v1 := stack.PopInt()
 
 	res := v1 * v2
 
@@ -58,8 +58,8 @@ type LMUL struct {
 func (l *LMUL) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopLong()
 	v2 := stack.PopLong()
+	v1 := stack.PopLong()
 
 	res := v1 * v2
 

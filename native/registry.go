@@ -9,7 +9,7 @@ type NativeMethod func(frame *jvmstack.Frame)
 
 var registry = map[string]NativeMethod{}
 
-func Registrer(className, methodName, methodDescriptor string, method NativeMethod) {
+func Register(className, methodName, methodDescriptor string, method NativeMethod) {
 	key := generateKey(className, methodName, methodDescriptor)
 	registry[key] = method
 }

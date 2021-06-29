@@ -18,7 +18,7 @@ func (o *Object) Fields() Slots {
 }
 
 func (o *Object) IsInstanceOf(class *Class) bool {
-	return class.isAssignableFrom(o.class)
+	return class.IsAssignableFrom(o.class)
 }
 
 func (o *Object) Class() *Class {
@@ -35,6 +35,21 @@ func (o *Object) GetRefVar(name, descriptor string) *Object {
 	field := o.class.getField(name, descriptor, false)
 	slots := o.data.(Slots)
 	return slots.GetRef(field.slotId)
+}
+
+func (o *Object) SetIntVar(name, descriptor string, val int32) {
+	field := o.class.getField(name, descriptor, false)
+	slots := o.data.(Slots)
+	slots.SetInt(field.slotId, val)
+}
+func (o *Object) GetIntVar(name, descriptor string) int32 {
+	field := o.class.getField(name, descriptor, false)
+	slots := o.data.(Slots)
+	return slots.GetInt(field.slotId)
+}
+
+func (o *Object) Data() interface{} {
+	return o.data
 }
 
 func (o *Object) SetExtra(extra interface{}) {

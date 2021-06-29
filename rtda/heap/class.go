@@ -108,6 +108,9 @@ func (c *Class) GetPackageName() string {
 
 	return ""
 }
+func (c *Class) AccessFlags() uint16 {
+	return c.accessFlag
+}
 
 func (c *Class) ConstantPool() *ConstantPool {
 	return c.constantPool
@@ -143,6 +146,10 @@ func (c *Class) InitStarted() bool {
 
 func (c *Class) StartInit() {
 	c.initStarted = true
+}
+
+func (c *Class) Interfaces() []*Class {
+	return c.interfaces
 }
 
 func (c *Class) ArrayClass() *Class {
@@ -189,13 +196,21 @@ func (c *Class) GetInstanceMethod(name, descriptor string) *Method {
 	return c.getMethod(name, descriptor, false)
 }
 
+func (c *Class) GetStaticMethod(name, descriptor string) *Method {
+	return c.getMethod(name, descriptor, true)
+}
+
+func (c *Class) GetConstructor(descriptor string) *Method {
+	return c.GetInstanceMethod("<init>", descriptor)
+}
+
 func (c *Class) GetMainMethod() *Method {
 	return c.getMethod("main", "([Ljava/lang/String;)V", true)
 }
 
 func (c *Class) getMethod(name, descriptor string, isStatic bool) *Method {
-	for clazz := c; clazz != nil; clazz = c.superClass {
-		for _, method := range c.methods {
+	for clazz := c; clazz != nil; clazz = clazz.superClass {
+		for _, method := range clazz.methods {
 			if method.IsStatic() == isStatic &&
 				method.name == name &&
 				method.descriptor == descriptor {
@@ -205,4 +220,42 @@ func (c *Class) getMethod(name, descriptor string, isStatic bool) *Method {
 	}
 
 	return nil
+}
+
+func (c *Class) GetFields(publicOnly bool) []*Field {
+	if publicOnly {
+		publicFields := make([]*Field, 0, len(c.fields))
+		for _, field := range c.fields {
+			if field.IsPublic() {
+				publicFields = append(publicFields, field)
+			}
+		}
+		return publicFields
+	} else {
+		return c.fields
+	}
+}
+
+func (c *Class) GetMethods(publicOnly bool) []*Method {
+	methods := make([]*Method, 0, len(c.methods))
+	for _, method := range c.methods {
+		if !method.isClinit() && !method.isConstructor() {
+			if !publicOnly || method.IsPublic() {
+				methods = append(methods, method)
+			}
+		}
+	}
+	return methods
+}
+
+func (c *Class) GetConstructors(publicOnly bool) []*Method {
+	constructors := make([]*Method, 0, len(c.methods))
+	for _, method := range c.methods {
+		if method.isConstructor() {
+			if !publicOnly || method.IsPublic() {
+				constructors = append(constructors, method)
+			}
+		}
+	}
+	return constructors
 }

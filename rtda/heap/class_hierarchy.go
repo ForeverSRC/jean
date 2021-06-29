@@ -1,10 +1,10 @@
 package heap
 
-// isAssignableFrom c is assignable from other means
+// IsAssignableFrom c is assignable from other means
 // 1.c and other are the same class
 // 2.other is sub class of c
 // 3.other implemented interface c
-func (c *Class) isAssignableFrom(other *Class) bool {
+func (c *Class) IsAssignableFrom(other *Class) bool {
 	s, t := other, c
 	if s == t {
 		return true
@@ -40,7 +40,7 @@ func (c *Class) isAssignableFrom(other *Class) bool {
 		} else {
 			sc := s.ComponentClass()
 			tc := t.ComponentClass()
-			return sc == tc || tc.isAssignableFrom(sc)
+			return sc == tc || tc.IsAssignableFrom(sc)
 		}
 	}
 

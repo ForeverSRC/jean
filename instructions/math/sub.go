@@ -13,8 +13,8 @@ type DSUB struct {
 func (d *DSUB) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopDouble()
 	v2 := stack.PopDouble()
+	v1 := stack.PopDouble()
 
 	res := v1 - v2
 
@@ -28,8 +28,8 @@ type FSUB struct {
 func (f *FSUB) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopFloat()
 	v2 := stack.PopFloat()
+	v1 := stack.PopFloat()
 
 	res := v1 - v2
 
@@ -43,8 +43,8 @@ type ISUB struct {
 func (i *ISUB) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopInt()
 	v2 := stack.PopInt()
+	v1 := stack.PopInt()
 
 	res := v1 - v2
 
@@ -58,8 +58,8 @@ type LSUB struct {
 func (l *LSUB) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopLong()
 	v2 := stack.PopLong()
+	v1 := stack.PopLong()
 
 	res := v1 - v2
 

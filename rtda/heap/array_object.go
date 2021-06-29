@@ -77,17 +77,17 @@ func ArrayCopy(src *Object, srcPos int32, dest *Object, destPos int32, length in
 		_src := src.data.([]int32)[srcPos : srcPos+length]
 		_dst := dest.data.([]int32)[destPos : destPos+length]
 		copy(_dst, _src)
-	case int16:
+	case []int16:
 		// short
 		_src := src.data.([]int16)[srcPos : srcPos+length]
 		_dst := dest.data.([]int16)[destPos : destPos+length]
 		copy(_dst, _src)
-	case int8:
+	case []int8:
 		// byte boolean
 		_src := src.data.([]int8)[srcPos : srcPos+length]
 		_dst := dest.data.([]int8)[destPos : destPos+length]
 		copy(_dst, _src)
-	case uint16:
+	case []uint16:
 		// char
 		_src := src.data.([]uint16)[srcPos : srcPos+length]
 		_dst := dest.data.([]uint16)[destPos : destPos+length]

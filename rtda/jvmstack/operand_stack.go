@@ -10,7 +10,7 @@ type OperandStack struct {
 	slots []Slot
 }
 
-func newOperandStack(maxStack uint) *OperandStack {
+func NewOperandStack(maxStack uint) *OperandStack {
 	if maxStack > 0 {
 		return &OperandStack{
 			slots: make([]Slot, maxStack),
@@ -88,10 +88,6 @@ func (os *OperandStack) PushSlot(slot Slot) {
 func (os *OperandStack) PopSlot() Slot {
 	os.top--
 	return os.slots[os.top]
-}
-
-func (os *OperandStack) TopSlot() Slot {
-	return os.slots[os.top-1]
 }
 
 // GetRefFromTop 返回距离栈顶n个slot的引用变量

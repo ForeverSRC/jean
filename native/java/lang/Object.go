@@ -32,8 +32,15 @@ func clone(frame *jvmstack.Frame) {
 	frame.OperandStack().PushRef(this.Clone())
 }
 
+// public final native void notifyAll();
+// ()V
+func notifyAll(frame *jvmstack.Frame) {
+	// todo
+}
+
 func init() {
-	native.Registrer(constants.JavaLangObject, "getClass", "()Ljava/lang/Class;", getClass)
-	native.Registrer(constants.JavaLangObject, "hashCode", "()I", hashCode)
-	native.Registrer(constants.JavaLangObject, "clone", "()Ljava/lang/Object;", clone)
+	native.Register(constants.JavaLangObject, "getClass", "()Ljava/lang/Class;", getClass)
+	native.Register(constants.JavaLangObject, "hashCode", "()I", hashCode)
+	native.Register(constants.JavaLangObject, "clone", "()Ljava/lang/Object;", clone)
+	native.Register(constants.JavaLangObject, "notifyAll", "()V", notifyAll)
 }

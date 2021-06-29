@@ -49,3 +49,9 @@ func (f *Field) ConstantValueIndex() uint {
 func (f *Field) SlotId() uint {
 	return f.slotId
 }
+
+// reflection
+func (f *Field) Type() *Class {
+	className := toClassName(f.descriptor)
+	return f.class.loader.LoadClass(className)
+}
