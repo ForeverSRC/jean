@@ -3,14 +3,14 @@ package comparisons
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type IFEQ struct {
 	base.BranchInstruction
 }
 
-func (ifcond *IFEQ) Execute(frame *rtda.Frame) {
+func (ifcond *IFEQ) Execute(frame *jvmstack.Frame) {
 	_ifcond(frame, func(i int32) bool {
 		return i == 0
 	}, ifcond.Offset)
@@ -20,7 +20,7 @@ type IFNE struct {
 	base.BranchInstruction
 }
 
-func (ifcond *IFNE) Execute(frame *rtda.Frame) {
+func (ifcond *IFNE) Execute(frame *jvmstack.Frame) {
 	_ifcond(frame, func(i int32) bool {
 		return i != 0
 	}, ifcond.Offset)
@@ -30,7 +30,7 @@ type IFLT struct {
 	base.BranchInstruction
 }
 
-func (ifcond *IFLT) Execute(frame *rtda.Frame) {
+func (ifcond *IFLT) Execute(frame *jvmstack.Frame) {
 	_ifcond(frame, func(i int32) bool {
 		return i < 0
 	}, ifcond.Offset)
@@ -40,7 +40,7 @@ type IFLE struct {
 	base.BranchInstruction
 }
 
-func (ifcond *IFLE) Execute(frame *rtda.Frame) {
+func (ifcond *IFLE) Execute(frame *jvmstack.Frame) {
 	_ifcond(frame, func(i int32) bool {
 		return i <= 0
 	}, ifcond.Offset)
@@ -50,7 +50,7 @@ type IFGT struct {
 	base.BranchInstruction
 }
 
-func (ifcond *IFGT) Execute(frame *rtda.Frame) {
+func (ifcond *IFGT) Execute(frame *jvmstack.Frame) {
 	_ifcond(frame, func(i int32) bool {
 		return i > 0
 	}, ifcond.Offset)
@@ -60,13 +60,13 @@ type IFGE struct {
 	base.BranchInstruction
 }
 
-func (ifcond *IFGE) Execute(frame *rtda.Frame) {
+func (ifcond *IFGE) Execute(frame *jvmstack.Frame) {
 	_ifcond(frame, func(i int32) bool {
 		return i >= 0
 	}, ifcond.Offset)
 }
 
-func _ifcond(frame *rtda.Frame, cond func(int32) bool, offset int) {
+func _ifcond(frame *jvmstack.Frame, cond func(int32) bool, offset int) {
 	val := frame.OperandStack().PopInt()
 	if cond(val) {
 		base.Branch(frame, offset)

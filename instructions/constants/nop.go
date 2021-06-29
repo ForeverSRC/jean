@@ -3,14 +3,14 @@ package constants
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type NOP struct {
 	base.NoOperandsInstruction
 }
 
-func (nop *NOP) Execute(frame *rtda.Frame) {
+func (nop *NOP) Execute(frame *jvmstack.Frame) {
 	//do nothing
 }
 

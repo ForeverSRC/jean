@@ -122,3 +122,14 @@ func (cf *ClassFile) Fields() []*MemberInfo {
 func (cf *ClassFile) Methods() []*MemberInfo {
 	return cf.methods
 }
+
+func (cf *ClassFile) SourceFileAttribute() *SourceFileAttribute {
+	for _, attrInfo := range cf.attributes {
+		switch attrType := attrInfo.(type) {
+		case *SourceFileAttribute:
+			return attrType
+		}
+	}
+
+	return nil
+}

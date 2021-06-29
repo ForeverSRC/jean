@@ -3,7 +3,7 @@ package control
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type LOOKUP_SWITCH struct {
@@ -19,7 +19,7 @@ func (ls *LOOKUP_SWITCH) FetchOperands(reader *base.BytecodeReader) {
 	ls.matchOffsets = reader.ReadInt32s(ls.nparis * 2)
 }
 
-func (ls *LOOKUP_SWITCH) Execute(frame *rtda.Frame) {
+func (ls *LOOKUP_SWITCH) Execute(frame *jvmstack.Frame) {
 	key := frame.OperandStack().PopInt()
 	for i := int32(0); i < ls.nparis*2; i += 2 {
 		if ls.matchOffsets[i] == key {

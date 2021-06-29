@@ -3,7 +3,7 @@ package stack
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 /*
@@ -18,9 +18,10 @@ type DUP struct {
 	base.NoOperandsInstruction
 }
 
-func (d *DUP) Execute(frame *rtda.Frame) {
+func (d *DUP) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
-	slot := stack.TopSlot()
+	slot := stack.PopSlot()
+	stack.PushSlot(slot)
 	stack.PushSlot(slot)
 }
 
@@ -36,7 +37,7 @@ type DUP_X1 struct {
 	base.NoOperandsInstruction
 }
 
-func (d *DUP_X1) Execute(frame *rtda.Frame) {
+func (d *DUP_X1) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	slot1 := stack.PopSlot()
 	slot2 := stack.PopSlot()
@@ -59,7 +60,7 @@ type DUP_X2 struct {
 	base.NoOperandsInstruction
 }
 
-func (d *DUP_X2) Execute(frame *rtda.Frame) {
+func (d *DUP_X2) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	slot1 := stack.PopSlot()
 	slot2 := stack.PopSlot()
@@ -84,7 +85,7 @@ type DUP2 struct {
 	base.NoOperandsInstruction
 }
 
-func (d *DUP2) Execute(frame *rtda.Frame) {
+func (d *DUP2) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	slot1 := stack.PopSlot()
 	slot2 := stack.PopSlot()
@@ -107,7 +108,7 @@ type DUP2_X1 struct {
 	base.NoOperandsInstruction
 }
 
-func (d *DUP2_X1) Execute(frame *rtda.Frame) {
+func (d *DUP2_X1) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	slot1 := stack.PopSlot()
 	slot2 := stack.PopSlot()
@@ -133,7 +134,7 @@ type DUP2_X2 struct {
 	base.NoOperandsInstruction
 }
 
-func (d *DUP2_X2) Execute(frame *rtda.Frame) {
+func (d *DUP2_X2) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	slot1 := stack.PopSlot()
 	slot2 := stack.PopSlot()

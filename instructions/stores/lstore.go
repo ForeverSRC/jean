@@ -3,18 +3,18 @@ package stores
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type LSTORE struct {
 	base.Index8Instruction
 }
 
-func (l *LSTORE) Execute(frame *rtda.Frame) {
+func (l *LSTORE) Execute(frame *jvmstack.Frame) {
 	_lstore(frame, l.Index)
 }
 
-func _lstore(frame *rtda.Frame, index uint) {
+func _lstore(frame *jvmstack.Frame, index uint) {
 	val := frame.OperandStack().PopLong()
 	frame.LocalVars().SetLong(index, val)
 }
@@ -24,7 +24,7 @@ type LSTORE_0 struct {
 	base.NoOperandsInstruction
 }
 
-func (l *LSTORE_0) Execute(frame *rtda.Frame) {
+func (l *LSTORE_0) Execute(frame *jvmstack.Frame) {
 	_lstore(frame, 0)
 }
 
@@ -32,7 +32,7 @@ type LSTORE_1 struct {
 	base.NoOperandsInstruction
 }
 
-func (l *LSTORE_1) Execute(frame *rtda.Frame) {
+func (l *LSTORE_1) Execute(frame *jvmstack.Frame) {
 	_lstore(frame, 1)
 }
 
@@ -40,7 +40,7 @@ type LSTORE_2 struct {
 	base.NoOperandsInstruction
 }
 
-func (l *LSTORE_2) Execute(frame *rtda.Frame) {
+func (l *LSTORE_2) Execute(frame *jvmstack.Frame) {
 	_lstore(frame, 2)
 }
 
@@ -48,7 +48,7 @@ type LSTORE_3 struct {
 	base.NoOperandsInstruction
 }
 
-func (l *LSTORE_3) Execute(frame *rtda.Frame) {
+func (l *LSTORE_3) Execute(frame *jvmstack.Frame) {
 	_lstore(frame, 3)
 }
 

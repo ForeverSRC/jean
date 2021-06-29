@@ -3,7 +3,7 @@ package math
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type IINC struct {
@@ -16,7 +16,7 @@ func (i *IINC) FetchOperands(reader *base.BytecodeReader) {
 	i.Const = int32(reader.ReadInt8())
 }
 
-func (i *IINC) Execute(frame *rtda.Frame) {
+func (i *IINC) Execute(frame *jvmstack.Frame) {
 	localVars := frame.LocalVars()
 	val := localVars.GetInt(i.Index)
 	val += i.Const

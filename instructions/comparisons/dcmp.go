@@ -3,14 +3,14 @@ package comparisons
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type DCMPG struct {
 	base.NoOperandsInstruction
 }
 
-func (dcmpg *DCMPG) Execute(frame *rtda.Frame) {
+func (dcmpg *DCMPG) Execute(frame *jvmstack.Frame) {
 	_dcmp(frame, true)
 }
 
@@ -18,11 +18,11 @@ type DCMPL struct {
 	base.NoOperandsInstruction
 }
 
-func (dcmpl *DCMPL) Execute(frame *rtda.Frame) {
+func (dcmpl *DCMPL) Execute(frame *jvmstack.Frame) {
 	_dcmp(frame, false)
 }
 
-func _dcmp(frame *rtda.Frame, gFlag bool) {
+func _dcmp(frame *jvmstack.Frame, gFlag bool) {
 	stack := frame.OperandStack()
 	v2 := stack.PopDouble()
 	v1 := stack.PopDouble()

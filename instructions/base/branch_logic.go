@@ -1,8 +1,10 @@
 package base
 
-import "jean/rtda"
+import (
+	"jean/rtda/jvmstack"
+)
 
-func Branch(frame *rtda.Frame, offset int) {
+func Branch(frame *jvmstack.Frame, offset int) {
 	pc := frame.Thread().PC()
 	nextPC := pc + offset
 	frame.SetNextPC(nextPC)

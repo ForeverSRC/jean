@@ -3,14 +3,14 @@ package stack
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type SWAP struct {
 	base.NoOperandsInstruction
 }
 
-func (s *SWAP) Execute(frame *rtda.Frame) {
+func (s *SWAP) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	slot1 := stack.PopSlot()
 	slot2 := stack.PopSlot()

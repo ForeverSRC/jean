@@ -3,7 +3,7 @@ package constants
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 // BIPUSH 从操作数中获取一个byte整数，扩展成int并推入栈顶
@@ -15,7 +15,7 @@ func (bipush *BIPUSH) FetchOperands(reader *base.BytecodeReader) {
 	bipush.val = reader.ReadInt8()
 }
 
-func (bipush *BIPUSH) Execute(frame *rtda.Frame) {
+func (bipush *BIPUSH) Execute(frame *jvmstack.Frame) {
 	i := int32(bipush.val)
 	frame.OperandStack().PushInt(i)
 }
@@ -29,7 +29,7 @@ func (sipush *SIPUSH) FetchOperands(reader *base.BytecodeReader) {
 	sipush.val = reader.ReadInt16()
 }
 
-func (sipush *SIPUSH) Execute(frame *rtda.Frame) {
+func (sipush *SIPUSH) Execute(frame *jvmstack.Frame) {
 	i := int32(sipush.val)
 	frame.OperandStack().PushInt(i)
 }

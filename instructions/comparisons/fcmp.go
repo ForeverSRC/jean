@@ -3,14 +3,14 @@ package comparisons
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type FCMPG struct {
 	base.NoOperandsInstruction
 }
 
-func (fcmpg *FCMPG) Execute(frame *rtda.Frame) {
+func (fcmpg *FCMPG) Execute(frame *jvmstack.Frame) {
 	_fcmp(frame, true)
 }
 
@@ -18,11 +18,11 @@ type FCMPL struct {
 	base.NoOperandsInstruction
 }
 
-func (fcmpl *FCMPL) Execute(frame *rtda.Frame) {
+func (fcmpl *FCMPL) Execute(frame *jvmstack.Frame) {
 	_fcmp(frame, false)
 }
 
-func _fcmp(frame *rtda.Frame, gFlag bool) {
+func _fcmp(frame *jvmstack.Frame, gFlag bool) {
 	stack := frame.OperandStack()
 	v2 := stack.PopFloat()
 	v1 := stack.PopFloat()

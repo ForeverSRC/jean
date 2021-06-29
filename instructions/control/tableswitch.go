@@ -3,7 +3,7 @@ package control
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type TABLE_SWITCH struct {
@@ -22,7 +22,7 @@ func (ts *TABLE_SWITCH) FetchOperands(reader *base.BytecodeReader) {
 	ts.jumpOffsets = reader.ReadInt32s(jumpOffset)
 }
 
-func (ts *TABLE_SWITCH) Execute(frame *rtda.Frame) {
+func (ts *TABLE_SWITCH) Execute(frame *jvmstack.Frame) {
 	index := frame.OperandStack().PopInt()
 
 	var offset int

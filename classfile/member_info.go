@@ -27,6 +27,10 @@ func readMember(reader *ClassReader, cp ConstantPool) *MemberInfo {
 	}
 }
 
+func (mi *MemberInfo) AccessFlags() uint16 {
+	return mi.accessFlag
+}
+
 func (mi *MemberInfo) Name() string {
 	return mi.cp.getUtf8(mi.nameIndex)
 }
@@ -37,11 +41,54 @@ func (mi *MemberInfo) Descriptor() string {
 
 func (mi *MemberInfo) CodeAttribute() *CodeAttribute {
 	for _, attrInfo := range mi.attributes {
-		switch attrInfo.(type) {
+		switch attrType := attrInfo.(type) {
 		case *CodeAttribute:
-			return attrInfo.(*CodeAttribute)
+			return attrType
 		}
 	}
 
+	return nil
+}
+
+func (mi *MemberInfo) ConstantValueAttribute() *ConstantValueAttribute {
+	for _, attrInfo := range mi.attributes {
+		switch attrType := attrInfo.(type) {
+		case *ConstantValueAttribute:
+			return attrType
+		}
+	}
+
+	return nil
+}
+
+func (mi *MemberInfo) ExceptionsAttribute() *ExceptionsAttribute {
+	for _, attrInfo := range mi.attributes {
+		switch attrType := attrInfo.(type) {
+		case *ExceptionsAttribute:
+			return attrType
+		}
+	}
+	return nil
+}
+
+func (mi *MemberInfo) RuntimeVisibleAnnotationsAttributeData() []byte {
+	return mi.getUnparsedAttributeData("RuntimeVisibleAnnotations")
+}
+func (mi *MemberInfo) RuntimeVisibleParameterAnnotationsAttributeData() []byte {
+	return mi.getUnparsedAttributeData("RuntimeVisibleParameterAnnotationsAttribute")
+}
+func (mi *MemberInfo) AnnotationDefaultAttributeData() []byte {
+	return mi.getUnparsedAttributeData("AnnotationDefault")
+}
+
+func (mi *MemberInfo) getUnparsedAttributeData(name string) []byte {
+	for _, attrInfo := range mi.attributes {
+		switch unparsedAttr := attrInfo.(type) {
+		case *UnparsedAttribute:
+			if unparsedAttr.name == name {
+				return unparsedAttr.info
+			}
+		}
+	}
 	return nil
 }

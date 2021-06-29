@@ -1,10 +1,12 @@
 package base
 
-import "jean/rtda"
+import (
+	"jean/rtda/jvmstack"
+)
 
 type Instruction interface {
 	FetchOperands(reader *BytecodeReader)
-	Execute(frame *rtda.Frame)
+	Execute(frame *jvmstack.Frame)
 }
 
 type NoOperandsInstruction struct{}

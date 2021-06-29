@@ -3,18 +3,18 @@ package stores
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type ISTORE struct {
 	base.Index8Instruction
 }
 
-func (i *ISTORE) Execute(frame *rtda.Frame) {
+func (i *ISTORE) Execute(frame *jvmstack.Frame) {
 	_istore(frame, i.Index)
 }
 
-func _istore(frame *rtda.Frame, index uint) {
+func _istore(frame *jvmstack.Frame, index uint) {
 	val := frame.OperandStack().PopInt()
 	frame.LocalVars().SetInt(index, val)
 }
@@ -25,7 +25,7 @@ type ISTORE_0 struct {
 	base.NoOperandsInstruction
 }
 
-func (i *ISTORE_0) Execute(frame *rtda.Frame) {
+func (i *ISTORE_0) Execute(frame *jvmstack.Frame) {
 	_istore(frame, 0)
 }
 
@@ -33,7 +33,7 @@ type ISTORE_1 struct {
 	base.NoOperandsInstruction
 }
 
-func (i *ISTORE_1) Execute(frame *rtda.Frame) {
+func (i *ISTORE_1) Execute(frame *jvmstack.Frame) {
 	_istore(frame, 1)
 }
 
@@ -41,7 +41,7 @@ type ISTORE_2 struct {
 	base.NoOperandsInstruction
 }
 
-func (i *ISTORE_2) Execute(frame *rtda.Frame) {
+func (i *ISTORE_2) Execute(frame *jvmstack.Frame) {
 	_istore(frame, 2)
 }
 
@@ -49,7 +49,7 @@ type ISTORE_3 struct {
 	base.NoOperandsInstruction
 }
 
-func (i *ISTORE_3) Execute(frame *rtda.Frame) {
+func (i *ISTORE_3) Execute(frame *jvmstack.Frame) {
 	_istore(frame, 3)
 }
 
