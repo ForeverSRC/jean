@@ -3,7 +3,7 @@ package math
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 	"math"
 )
 
@@ -11,10 +11,10 @@ type DREM struct {
 	base.NoOperandsInstruction
 }
 
-func (d *DREM) Execute(frame *rtda.Frame) {
+func (d *DREM) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
-	v1 := stack.PopDouble()
 	v2 := stack.PopDouble()
+	v1 := stack.PopDouble()
 
 	res := math.Mod(v1, v2)
 	stack.PushDouble(res)
@@ -24,10 +24,10 @@ type FREM struct {
 	base.NoOperandsInstruction
 }
 
-func (f *FREM) Execute(frame *rtda.Frame) {
+func (f *FREM) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
-	v1 := stack.PopFloat()
 	v2 := stack.PopFloat()
+	v1 := stack.PopFloat()
 
 	res := float32(math.Mod(float64(v1), float64(v2)))
 	stack.PushFloat(res)
@@ -37,10 +37,10 @@ type IREM struct {
 	base.NoOperandsInstruction
 }
 
-func (i *IREM) Execute(frame *rtda.Frame) {
+func (i *IREM) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
-	v1 := stack.PopInt()
 	v2 := stack.PopInt()
+	v1 := stack.PopInt()
 	if v2 == 0 {
 		panic("java.lang.ArithmeticException: / by zero")
 	}
@@ -53,10 +53,10 @@ type LREM struct {
 	base.NoOperandsInstruction
 }
 
-func (l *LREM) Execute(frame *rtda.Frame) {
+func (l *LREM) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
-	v1 := stack.PopLong()
 	v2 := stack.PopLong()
+	v1 := stack.PopLong()
 	if v2 == 0 {
 		panic("java.lang.ArithmeticException: / by zero")
 	}

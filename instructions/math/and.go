@@ -3,14 +3,14 @@ package math
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type IAND struct {
 	base.NoOperandsInstruction
 }
 
-func (i *IAND) Execute(frame *rtda.Frame) {
+func (i *IAND) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v2 := stack.PopInt()
 	v1 := stack.PopInt()
@@ -23,7 +23,7 @@ type LAND struct {
 	base.NoOperandsInstruction
 }
 
-func (l *LAND) Execute(frame *rtda.Frame) {
+func (l *LAND) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v2 := stack.PopLong()
 	v1 := stack.PopLong()

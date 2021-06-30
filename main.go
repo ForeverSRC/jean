@@ -3,5 +3,9 @@ package main
 import "jean/command"
 
 func main() {
-	command.StartTest()
+	cmd := command.ParseCmd()
+	ok := cmd.ParseFlags()
+	if ok {
+		command.NewJVM(cmd).Start()
+	}
 }

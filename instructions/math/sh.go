@@ -3,14 +3,14 @@ package math
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type ISHL struct {
 	base.NoOperandsInstruction
 }
 
-func (i *ISHL) Execute(frame *rtda.Frame) {
+func (i *ISHL) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v2 := stack.PopInt()
 	v1 := stack.PopInt()
@@ -27,7 +27,7 @@ type ISHR struct {
 	base.NoOperandsInstruction
 }
 
-func (i *ISHR) Execute(frame *rtda.Frame) {
+func (i *ISHR) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v2 := stack.PopInt()
 	v1 := stack.PopInt()
@@ -42,7 +42,7 @@ type IUSHR struct {
 	base.NoOperandsInstruction
 }
 
-func (i *IUSHR) Execute(frame *rtda.Frame) {
+func (i *IUSHR) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v2 := stack.PopInt()
 	v1 := stack.PopInt()
@@ -57,7 +57,7 @@ type LSHL struct {
 	base.NoOperandsInstruction
 }
 
-func (i *LSHL) Execute(frame *rtda.Frame) {
+func (i *LSHL) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v2 := stack.PopInt()
 	v1 := stack.PopLong()
@@ -73,7 +73,7 @@ type LSHR struct {
 	base.NoOperandsInstruction
 }
 
-func (l *LSHR) Execute(frame *rtda.Frame) {
+func (l *LSHR) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v2 := stack.PopInt()
 	v1 := stack.PopLong()
@@ -89,7 +89,7 @@ type LUSHR struct {
 	base.NoOperandsInstruction
 }
 
-func (l *LUSHR) Execute(frame *rtda.Frame) {
+func (l *LUSHR) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	v2 := stack.PopInt()
 	v1 := stack.PopLong()

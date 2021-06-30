@@ -3,18 +3,18 @@ package loads
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type ILOAD struct {
 	base.Index8Instruction
 }
 
-func (i *ILOAD) Execute(frame *rtda.Frame) {
+func (i *ILOAD) Execute(frame *jvmstack.Frame) {
 	_iload(frame, i.Index)
 }
 
-func _iload(frame *rtda.Frame, index uint) {
+func _iload(frame *jvmstack.Frame, index uint) {
 	val := frame.LocalVars().GetInt(index)
 	frame.OperandStack().PushInt(val)
 }
@@ -25,7 +25,7 @@ type ILOAD_0 struct {
 	base.NoOperandsInstruction
 }
 
-func (i *ILOAD_0) Execute(frame *rtda.Frame) {
+func (i *ILOAD_0) Execute(frame *jvmstack.Frame) {
 	_iload(frame, 0)
 }
 
@@ -33,7 +33,7 @@ type ILOAD_1 struct {
 	base.NoOperandsInstruction
 }
 
-func (i *ILOAD_1) Execute(frame *rtda.Frame) {
+func (i *ILOAD_1) Execute(frame *jvmstack.Frame) {
 	_iload(frame, 1)
 }
 
@@ -41,7 +41,7 @@ type ILOAD_2 struct {
 	base.NoOperandsInstruction
 }
 
-func (i *ILOAD_2) Execute(frame *rtda.Frame) {
+func (i *ILOAD_2) Execute(frame *jvmstack.Frame) {
 	_iload(frame, 2)
 }
 
@@ -49,7 +49,7 @@ type ILOAD_3 struct {
 	base.NoOperandsInstruction
 }
 
-func (i *ILOAD_3) Execute(frame *rtda.Frame) {
+func (i *ILOAD_3) Execute(frame *jvmstack.Frame) {
 	_iload(frame, 3)
 }
 

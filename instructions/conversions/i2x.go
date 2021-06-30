@@ -3,7 +3,7 @@ package conversions
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 // I2B Convert int to byte
@@ -11,7 +11,7 @@ type I2B struct {
 	base.NoOperandsInstruction
 }
 
-func (i *I2B) Execute(frame *rtda.Frame) {
+func (i *I2B) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	val := stack.PopInt()
 	b := int32(int8(val))
@@ -23,7 +23,7 @@ type I2C struct {
 	base.NoOperandsInstruction
 }
 
-func (i *I2C) Execute(frame *rtda.Frame) {
+func (i *I2C) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	val := stack.PopInt()
 	c := int32(uint16(val))
@@ -34,7 +34,7 @@ type I2D struct {
 	base.NoOperandsInstruction
 }
 
-func (i *I2D) Execute(frame *rtda.Frame) {
+func (i *I2D) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	val := stack.PopInt()
 	target := float64(val)
@@ -45,7 +45,7 @@ type I2F struct {
 	base.NoOperandsInstruction
 }
 
-func (i *I2F) Execute(frame *rtda.Frame) {
+func (i *I2F) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	val := stack.PopInt()
 	target := float32(val)
@@ -56,7 +56,7 @@ type I2L struct {
 	base.NoOperandsInstruction
 }
 
-func (i *I2L) Execute(frame *rtda.Frame) {
+func (i *I2L) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	val := stack.PopInt()
 	target := int64(val)
@@ -68,7 +68,7 @@ type I2S struct {
 	base.NoOperandsInstruction
 }
 
-func (i *I2S) Execute(frame *rtda.Frame) {
+func (i *I2S) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 	val := stack.PopInt()
 	s := int32(int16(val))

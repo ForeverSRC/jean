@@ -3,7 +3,7 @@ package extended
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type GOTO_W struct {
@@ -14,7 +14,7 @@ func (g *GOTO_W) FetchOperands(reader *base.BytecodeReader) {
 	g.offset = int(reader.ReadInt32())
 }
 
-func (g *GOTO_W) Execute(frame *rtda.Frame) {
+func (g *GOTO_W) Execute(frame *jvmstack.Frame) {
 	base.Branch(frame, g.offset)
 }
 

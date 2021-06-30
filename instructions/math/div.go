@@ -3,18 +3,18 @@ package math
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type DDIV struct {
 	base.NoOperandsInstruction
 }
 
-func (d *DDIV) Execute(frame *rtda.Frame) {
+func (d *DDIV) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopDouble()
 	v2 := stack.PopDouble()
+	v1 := stack.PopDouble()
 
 	res := v1 / v2
 
@@ -25,11 +25,11 @@ type FDIV struct {
 	base.NoOperandsInstruction
 }
 
-func (f *FDIV) Execute(frame *rtda.Frame) {
+func (f *FDIV) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopFloat()
 	v2 := stack.PopFloat()
+	v1 := stack.PopFloat()
 
 	res := v1 / v2
 
@@ -40,11 +40,11 @@ type IDIV struct {
 	base.NoOperandsInstruction
 }
 
-func (i *IDIV) Execute(frame *rtda.Frame) {
+func (i *IDIV) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopInt()
 	v2 := stack.PopInt()
+	v1 := stack.PopInt()
 	if v2 == 0 {
 		panic("java.lang.ArithmeticException: / by zero")
 	}
@@ -58,11 +58,11 @@ type LDIV struct {
 	base.NoOperandsInstruction
 }
 
-func (l *LDIV) Execute(frame *rtda.Frame) {
+func (l *LDIV) Execute(frame *jvmstack.Frame) {
 	stack := frame.OperandStack()
 
-	v1 := stack.PopLong()
 	v2 := stack.PopLong()
+	v1 := stack.PopLong()
 	if v2 == 0 {
 		panic("java.lang.ArithmeticException: / by zero")
 	}

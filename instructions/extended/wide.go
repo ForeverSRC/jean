@@ -7,7 +7,7 @@ import (
 	"jean/instructions/loads"
 	"jean/instructions/math"
 	"jean/instructions/stores"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 // WIDE 指令改变其他指令的行为，modifiedInstruction字段存放被改变的指令。
@@ -89,7 +89,7 @@ func (w *WIDE) FetchOperands(reader *base.BytecodeReader) {
 	w.modifiedInstruction = instFunc(reader)
 }
 
-func (w *WIDE) Execute(frame *rtda.Frame) {
+func (w *WIDE) Execute(frame *jvmstack.Frame) {
 	w.modifiedInstruction.Execute(frame)
 }
 

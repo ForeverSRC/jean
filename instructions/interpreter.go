@@ -2,10 +2,9 @@ package instructions
 
 import (
 	"fmt"
-	"jean/classfile"
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 import (
@@ -16,52 +15,66 @@ import (
 	_ "jean/instructions/extended"
 	_ "jean/instructions/loads"
 	_ "jean/instructions/math"
+	_ "jean/instructions/references"
+	_ "jean/instructions/reserved"
 	_ "jean/instructions/stack"
 	_ "jean/instructions/stores"
 )
 
-func Interpreter(methodInfo *classfile.MemberInfo) {
-	codeAttr := methodInfo.CodeAttribute()
-
-	maxLocals := codeAttr.MaxLocals()
-	maxStack := codeAttr.MaxStack()
-	bytecode := codeAttr.Code()
-
-	thread := rtda.NewThread()
-	frame := thread.NewFrame(maxLocals, maxStack)
-	thread.PushFrame(frame)
-
+func Interpreter(thread *jvmstack.Thread, logInst bool) {
 	// temp
-	defer catchErr(frame)
-	loop(thread, bytecode)
+	defer catchErr(thread)
+	loop(thread, logInst)
 }
 
-func loop(thread *rtda.Thread, bytecode []byte) {
-	frame := thread.PopFrame()
+func loop(thread *jvmstack.Thread, logInst bool) {
 	reader := &base.BytecodeReader{}
 
 	for {
+		frame := thread.CurrentFrame()
 		// calculate pc
 		pc := frame.NextPC()
 		thread.SetPC(pc)
 
 		// decode
-		reader.Reset(bytecode, pc)
+		reader.Reset(frame.Method().Code(), pc)
 		opcode := reader.ReadUint8()
 		inst := factory.Factory.NewInstruction(opcode)
 		inst.FetchOperands(reader)
 		frame.SetNextPC(reader.PC())
 
+		if logInst {
+			logInstruction(opcode, frame, inst)
+		}
+
 		// execute
-		fmt.Printf("pc:%2d inst:%T %v\n", pc, inst, inst)
 		inst.Execute(frame)
+		if thread.IsStackEmpty() {
+			break
+		}
 	}
 }
 
-func catchErr(frame *rtda.Frame) {
+func catchErr(thread *jvmstack.Thread) {
 	if r := recover(); r != nil {
-		fmt.Printf("LocalVars:%v\n", frame.LocalVars())
-		fmt.Printf("OperandStack:%v\n", frame.OperandStack())
+		logFrames(thread)
 		panic(r)
+	}
+}
+
+func logInstruction(opcode uint8, frame *jvmstack.Frame, inst base.Instruction) {
+	method := frame.Method()
+	className := method.Class().Name()
+	methodName := method.Name()
+	pc := frame.Thread().PC()
+	fmt.Printf("opcode:[0x%x] %v.%v() #%2d %T %v\n", opcode, className, methodName, pc, inst, inst)
+}
+
+func logFrames(thread *jvmstack.Thread) {
+	for !thread.IsStackEmpty() {
+		frame := thread.PopFrame()
+		method := frame.Method()
+		className := method.Class().Name()
+		fmt.Printf(">> pc:%4d %v.%v%v \n", frame.NextPC(), className, method.Name(), method.Descriptor())
 	}
 }

@@ -3,14 +3,14 @@ package control
 import (
 	"jean/instructions/base"
 	"jean/instructions/factory"
-	"jean/rtda"
+	"jean/rtda/jvmstack"
 )
 
 type GOTO struct {
 	base.BranchInstruction
 }
 
-func (g *GOTO) Execute(frame *rtda.Frame) {
+func (g *GOTO) Execute(frame *jvmstack.Frame) {
 	base.Branch(frame, g.Offset)
 }
 
