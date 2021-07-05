@@ -1,18 +1,20 @@
 package heap
 
 import (
+	"fmt"
 	"jean/classfile"
 	"jean/constants"
 	"strings"
 )
 
 type Class struct {
-	accessFlag        uint16
-	name              string
-	superClassName    string
-	interfaceNames    []string
-	constantPool      *ConstantPool
-	fields            []*Field
+	accessFlag     uint16
+	name           string
+	superClassName string
+	interfaceNames []string
+	constantPool   *ConstantPool
+	fields         []*Field
+	// 本类中的方法
 	methods           []*Method
 	loader            *ClassLoader
 	superClass        *Class
@@ -24,10 +26,21 @@ type Class struct {
 	// java.lang.Class 实例
 	jClass     *Object
 	sourceFile string
+
+	// vtable name&&descriptor -> Method
+	// 包含父类的方法
+	vtable map[string]*Method
+
+	itable map[string]*Method
 }
 
+const tableKey = "%s %s"
+
 func newClass(cf *classfile.ClassFile) *Class {
-	class := &Class{}
+	class := &Class{
+		vtable: make(map[string]*Method),
+		itable: make(map[string]*Method),
+	}
 	class.accessFlag = cf.AccessFlags()
 	class.name = cf.ClassName()
 	class.superClassName = cf.SuperClassName()
@@ -258,4 +271,30 @@ func (c *Class) GetConstructors(publicOnly bool) []*Method {
 		}
 	}
 	return constructors
+}
+
+func (c *Class) SetVtable(name, descriptor string, method *Method) {
+	c.vtable[fmt.Sprintf(tableKey, name, descriptor)] = method
+}
+
+func (c *Class) GetFromVtable(name, descriptor string) *Method {
+	m, ok := c.vtable[fmt.Sprintf(tableKey, name, descriptor)]
+	if !ok {
+		return nil
+	}
+
+	return m
+}
+
+func (c *Class) SetItable(name, descriptor string, method *Method) {
+	c.itable[fmt.Sprintf(tableKey, name, descriptor)] = method
+}
+
+func (c *Class) GetFromItable(name, descriptor string) *Method {
+	m, ok := c.itable[fmt.Sprintf(tableKey, name, descriptor)]
+	if !ok {
+		return nil
+	}
+
+	return m
 }

@@ -139,9 +139,9 @@ var sysProps = map[string]string{
 	"java.class.version":   "52.0",
 	"java.class.path":      "todo",
 	"java.awt.graphicsenv": "sun.awt.CGraphicsEnvironment",
-	"os.name":              runtime.GOOS,   // todo
-	"os.arch":              runtime.GOARCH, // todo
-	"os.version":           "",             // todo
+	"os.name":              runtime.GOOS, // todo
+	"os.arch":              runtime.GOARCH,
+	"os.version":           "", // todo
 	"file.separator":       string(os.PathSeparator),
 	"path.separator":       string(os.PathListSeparator),
 	"line.separator":       "\n", // todo
