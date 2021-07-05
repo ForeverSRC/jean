@@ -16,6 +16,7 @@ func (iv *INVOKE_VIRTUAL) Execute(frame *jvmstack.Frame) {
 	cp := currentClass.ConstantPool()
 	methodRef := cp.GetConstant(iv.Index).(*heap.MethodRef)
 
+	// resolvedMethod 并不是最终要调用的方法，只是符号引用解析出的方法
 	resolvedMethod := methodRef.ResolvedMethod()
 
 	if resolvedMethod.IsStatic() {
@@ -39,9 +40,16 @@ func (iv *INVOKE_VIRTUAL) Execute(frame *jvmstack.Frame) {
 		}
 	}
 
-	methodToBeInvoked := heap.LookupMethodInClass(thisRef.Class(), methodRef.Name(), methodRef.Descriptor())
-	if methodToBeInvoked == nil || methodToBeInvoked.IsAbstract() {
-		panic("java.lang.AbstractMethodError")
+	var methodToBeInvoked *heap.Method
+	if mtb := thisRef.Class().GetFromVtable(methodRef.Name(), methodRef.Descriptor()); mtb != nil {
+		methodToBeInvoked = mtb
+	} else {
+		methodToBeInvoked = heap.LookupMethodInClass(thisRef.Class(), methodRef.Name(), methodRef.Descriptor())
+		if methodToBeInvoked == nil || methodToBeInvoked.IsAbstract() {
+			panic("java.lang.AbstractMethodError")
+		}
+
+		thisRef.Class().SetVtable(methodRef.Name(), methodRef.Descriptor(), methodToBeInvoked)
 	}
 
 	base.InvokeMethod(frame, methodToBeInvoked)

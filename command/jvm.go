@@ -41,8 +41,8 @@ func (jvm *JVM) initVM() {
 	vmClass := jvm.classLoader.LoadClass(constants.SunMiscVM)
 	base.InitClass(jvm.mainThread, vmClass)
 	instructions.Interpreter(jvm.mainThread, false)
-	elapsedTime := time.Since(startTime) / time.Millisecond  // duration in ms
-	fmt.Printf("JVM successfully initialized. Cost: %d ms\n",elapsedTime)
+	elapsedTime := time.Since(startTime) / time.Millisecond // duration in ms
+	fmt.Printf("JVM successfully initialized. Cost: %d ms\n", elapsedTime)
 }
 
 func (jvm *JVM) execMain() {

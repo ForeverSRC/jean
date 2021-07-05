@@ -39,13 +39,20 @@ func (iv *INVOKE_INTERFACE) Execute(frame *jvmstack.Frame) {
 		panic("java.lang.IncompatibleClassChangeError")
 	}
 
-	methodToBeInvoked := heap.LookupMethodInClass(thisRef.Class(), methodRef.Name(), methodRef.Descriptor())
-	if methodToBeInvoked == nil || methodToBeInvoked.IsAbstract() {
-		panic("java.lang.AbstractMethodError")
-	}
+	var methodToBeInvoked *heap.Method
+	if mtb := thisRef.Class().GetFromItable(methodRef.Name(), methodRef.Descriptor()); mtb != nil {
+		methodToBeInvoked = mtb
+	} else {
+		methodToBeInvoked = heap.LookupMethodInClass(thisRef.Class(), methodRef.Name(), methodRef.Descriptor())
+		if methodToBeInvoked == nil || methodToBeInvoked.IsAbstract() {
+			panic("java.lang.AbstractMethodError")
+		}
 
-	if !methodToBeInvoked.IsPublic() {
-		panic("java.lang.IllegalAccessError")
+		if !methodToBeInvoked.IsPublic() {
+			panic("java.lang.IllegalAccessError")
+		}
+
+		thisRef.Class().SetItable(methodRef.Name(), methodRef.Descriptor(), methodToBeInvoked)
 	}
 
 	base.InvokeMethod(frame, methodToBeInvoked)
