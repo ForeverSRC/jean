@@ -91,6 +91,8 @@ func (cl *ClassLoader) LoadArrayClass(name string) *Class {
 			cl.LoadClass(constants.JavaLangCloneable),
 			cl.LoadClass(constants.JavaIoSerializable),
 		},
+		vtable: make(map[string]*Method),
+		itable: make(map[string]*Method),
 	}
 
 	cl.classMap[name] = class
@@ -214,6 +216,7 @@ func allocAndInitStaticVars(class *Class) {
 	}
 }
 
+// 用Constant Value属性给static final 修饰的基本类型或java.lang.String类型字段赋值
 func initStaticFinalVar(class *Class, field *Field) {
 	vars := class.staticVars
 	rtCp := class.constantPool
